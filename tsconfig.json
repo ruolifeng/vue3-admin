@@ -1,0 +1,18 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ],
+
+  // 指定全局组件类型
+  "compilerOptions": {
+    "types": [
+      "element-plus/global"
+    ]
+  }
+}
