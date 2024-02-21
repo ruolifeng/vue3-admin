@@ -9,7 +9,7 @@ const request: AxiosInstance = axios.create({
     // 使用easymock创建基础服务路径，可以将baseURL配置在.env.xxx配置文件中
     // baseURL: 'https://mock.mengxuegu.com/mock/65d57e8d351bbd02cf339ca9/vue3-admin',
     // baseURL: import.meta.env.BASE_URL,
-    baseURL: "/dev-api",
+    baseURL: import.meta.env.VITE_APP_BASE_API,
     // 超时时间
     timeout: 10000,
 });
