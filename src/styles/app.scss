@@ -1,31 +1,31 @@
 /* 初始化样式
 ------------------------------- */
 :root {
-  --mxg-color-white: #fff;
-  --mxg-color-black: #2b2f38;
-  --mxg-color-primary: #1966ff;
-  --mxg-border-color: #f1f2f3;
+  --rlf-color-white: #fff;
+  --rlf-color-black: #2b2f38;
+  --rlf-color-primary: #1966ff;
+  --rlf-border-color: #f1f2f3;
 
-  --mxg-color-hover: #3c3c3c;
-  --mxg-color-hover-rgba: rgba(0, 0, 0, .05);
+  --rlf-color-hover: #3c3c3c;
+  --rlf-color-hover-rgba: rgba(0, 0, 0, .05);
 
   // 左侧菜单
-  --mxg-bg-menuMainColor: var(--mxg-color-white) !important;
-  --mxg-bg-menuActiveColor: var(--mxg-color-black) !important;
-  --mxg-bg-menuHoverColor: var(--mxg-color-black) !important;
+  --rlf-bg-menuMainColor: var(--rlf-color-white) !important;
+  --rlf-bg-menuActiveColor: var(--rlf-color-black) !important;
+  --rlf-bg-menuHoverColor: var(--rlf-color-black) !important;
 
-  --mxg-text-menuMainColor: var(--mxg-color-black) !important;
-  --mxg-text-menuActiveColor: var(--mxg-color-white) !important;
-  --mxg-text-menuHoverColor: var(--mxg-color-white) !important;
+  --rlf-text-menuMainColor: var(--rlf-color-black) !important;
+  --rlf-text-menuActiveColor: var(--rlf-color-white) !important;
+  --rlf-text-menuHoverColor: var(--rlf-color-white) !important;
 
   // 头部导航
-  --mxg-bg-headerBarColor: var(--mxg-color-white) !important;
+  --rlf-bg-headerBarColor: var(--rlf-color-white) !important;
 
   // 头部右侧图标光标浮动
-  --mxg-color-user-hover: var(--mxg-color-hover-rgba) !important;
+  --rlf-color-user-hover: var(--rlf-color-hover-rgba) !important;
 
   // 边框
-  --mxg-border-color-light: var(--mxg-border-color) !important;
+  --rlf-border-color-light: var(--rlf-border-color) !important;
 
 }
 
@@ -169,7 +169,7 @@ body,
 /* 主布局样式
 ------------------------------- */
 .layout-padding {
-  border: 1px solid var(--mxg-border-color-light);
+  border: 1px solid var(--rlf-border-color-light);
   border-radius: 10px;
   overflow: hidden;
   padding: 20px;
@@ -196,14 +196,14 @@ body,
 
   // 左侧菜单
   .layout-aside {
-    background: var(--mxg-bg-menuMainColor);
+    background: var(--rlf-bg-menuMainColor);
     height: inherit;
     z-index: 1;
     position: relative;
     display: flex;
     flex-direction: column;
     overflow-x: hidden !important;
-    border-right: 1px solid var(--mxg-border-color-light);
+    border-right: 1px solid var(--rlf-border-color-light);
 
     .layout-logo {
       height: 52px;
@@ -237,8 +237,8 @@ body,
       display: flex;
       align-items: center;
       color: var(--el-text-color-regular) !important;
-      background: var(--mxg-bg-headerBarColor);
-      border-bottom: 1px solid var(--mxg-border-color-light) !important;
+      background: var(--rlf-bg-headerBarColor);
+      border-bottom: 1px solid var(--rlf-border-color-light) !important;
 
       .layout-header-breadcrumb {
         display: flex;
@@ -280,7 +280,7 @@ body,
           align-items: center;
 
           &:hover {
-            background: var(--mxg-color-user-hover);
+            background: var(--rlf-color-user-hover);
           }
         }
       }
@@ -318,33 +318,33 @@ body,
 
 .el-menu-item,
 .el-sub-menu__title {
-  color: var(--mxg-text-menuMainColor);
+  color: var(--rlf-text-menuMainColor);
 }
 
 .el-menu-item.is-active {
-  color: var(--mxg-text-menuActiveColor);
-  background-color: var(--mxg-bg-menuActiveColor);
+  color: var(--rlf-text-menuActiveColor);
+  background-color: var(--rlf-bg-menuActiveColor);
 }
 
 .el-menu-item:hover {
-  color: var(--mxg-text-menuHoverColor);
-  background-color: var(--mxg-bg-menuHoverColor);
+  color: var(--rlf-text-menuHoverColor);
+  background-color: var(--rlf-bg-menuHoverColor);
 }
 
 // 收缩后，鼠标放在多级菜单浮出窗口
 .el-menu--vertical {
-  background: var(--mxg-bg-menuMainColor);
+  background: var(--rlf-bg-menuMainColor);
 }
 
 // 收缩后，一级菜单浮出窗口 el-popper
 .el-popper.is-dark {
   color: var(--el-text-color-primary);
-  background: var(--mxg-bg-menuMainColor);
-  border: 1px solid var(--mxg-border-color);
+  background: var(--rlf-bg-menuMainColor);
+  border: 1px solid var(--rlf-border-color);
 
   .el-popper__arrow:before {
     // 箭头
-    background: var(--mxg-bg-menuMainColor) !important;
-    border: 1px solid var(--mxg-border-color); //var(--next-border-color);
+    background: var(--rlf-bg-menuMainColor) !important;
+    border: 1px solid var(--rlf-border-color); //var(--next-border-color);
   }
 }
