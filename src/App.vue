@@ -3,9 +3,10 @@
 </script>
 
 <template>
-
-  <el-button color="red">第一个按钮</el-button>
-  <SvgIcon name="ele-Search" color="red" size="100"/>
+  <!--路由组件布局出口-->
+  <div class="h100">
+    <router-view></router-view>
+  </div>
 </template>
 
 <style scoped></style>
