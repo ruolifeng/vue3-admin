@@ -1,16 +1,17 @@
 import axios from "axios";
-import type {Axios} from "axios";
+import type {AxiosInstance} from "axios";
+import {ElMessage} from "element-plus";
 
 /**
  * 手动创建一个axios实例
  */
-const request: Axios = axios.create({
-    // 使用easymock创建基础服务路径
+const request: AxiosInstance = axios.create({
+    // 使用easymock创建基础服务路径，可以将baseURL配置在.env.xxx配置文件中
     baseURL: 'https://mock.mengxuegu.com/mock/65d57e8d351bbd02cf339ca9/vue3-admin',
+    // baseURL: import.meta.env.BASE_URL,
     // 超时时间
     timeout: 10000,
 });
-
 
 // 请求拦截器
 request.interceptors.request.use((config) => {
@@ -23,8 +24,22 @@ request.interceptors.request.use((config) => {
 
 // 响应拦截器
 request.interceptors.response.use((response) => {
-    return response;
+    const res = response.data;
+    // 响应正常返回响应结果给接口调用方
+    if (res.code === 20000) {
+        return res;
+    }
+    // 响应错误弹出错误提示
+    ElMessage.error(res.message);
 }, (error) => {
+    // 处理响应错误
+    const {message, response} = error;
+    if (message.indexOf('timeout') != -1) {
+        ElMessage.error('网络超时！');
+    } else if (message === 'Network error') {
+        ElMessage.error('网络连接错误！');
+    } else if (response.data) ElMessage.error(response.statusText)
+    else ElMessage.error('接口请求错误！')
     return Promise.reject(error)
 });
 
