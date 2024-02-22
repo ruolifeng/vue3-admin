@@ -2,6 +2,7 @@
 import {defineAsyncComponent} from "vue";
 
 const Logo = defineAsyncComponent(() => import('@/layout/layoutAside/logo.vue'))
+const asideMenu = defineAsyncComponent(() => import('@/layout/layoutAside/asideMenu.vue'))
 </script>
 
 <template>
@@ -9,6 +10,7 @@ const Logo = defineAsyncComponent(() => import('@/layout/layoutAside/logo.vue'))
   <div class="h100">
     <el-aside class="layout-aside layout-aside-menu-200">
       <logo></logo>
+      <asideMenu></asideMenu>
     </el-aside>
   </div>
 </template>
