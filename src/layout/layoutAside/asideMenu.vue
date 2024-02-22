@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SvgIcon from '@/components/svgicon/index.vue'
+import {translate} from "element-plus";
 </script>
 
 <template>
