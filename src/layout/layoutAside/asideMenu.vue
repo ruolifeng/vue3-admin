@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import SvgIcon from '@/components/svgicon/index.vue'
-import {translate} from "element-plus";
 </script>
 
 <template>
@@ -57,7 +56,7 @@ import {translate} from "element-plus";
           </template>
         </el-menu-item>
       </el-sub-menu>
-      <el-menu-item index="/me">
+      <el-menu-item index="/author">
         <SvgIcon name="ele-Link"></SvgIcon>
         <span>作者官网</span>
       </el-menu-item>
