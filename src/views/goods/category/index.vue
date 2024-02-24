@@ -3,7 +3,7 @@
 </script>
 
 <template>
-商品分类
+  <div>菜单</div>
 </template>
 
 <style scoped>

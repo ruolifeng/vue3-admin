@@ -2,5 +2,7 @@
 @import 'element-plus/dist/index.css';
 
 // 自定义样式放在下面将会覆盖上面ui组件中同名的样式，不然下面的将会失效
-@import "./app.scss";
+@import "app";
+
+@import "transition";
 

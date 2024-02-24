@@ -20,6 +20,7 @@ export const dynamicRoutes: RouteRecordRaw[] = [
         path: '/',
         name: 'Layout',
         component: () => import('@/layout/index.vue'),
+        redirect: '/home',
         children: [
             {
                 path: '/home',

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-401
+  <div>菜单</div>
 </template>
 
 <style scoped>

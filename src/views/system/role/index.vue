@@ -3,7 +3,7 @@
 </script>
 
 <template>
-角色
+  <div>菜单</div>
 </template>
 
 <style scoped>
