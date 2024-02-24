@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" name="LayoutIndex">
 import {defineAsyncComponent} from "vue";
 
 const Logo = defineAsyncComponent(() => import('@/layout/layoutAside/logo.vue'))

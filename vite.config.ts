@@ -2,7 +2,7 @@ import {fileURLToPath, URL} from 'node:url'
 
 import {defineConfig, loadEnv} from 'vite'
 import vue from '@vitejs/plugin-vue'
-
+import vueSetupExtend from 'vite-plugin-vue-setup-extend-plus'
 // https://vitejs.dev/config/
 export default defineConfig(({mode}) => {
     const env = loadEnv(mode, process.cwd());
@@ -26,6 +26,7 @@ export default defineConfig(({mode}) => {
         },
         plugins: [
             vue(),
+            vueSetupExtend()
         ],
         resolve: {
             alias: {

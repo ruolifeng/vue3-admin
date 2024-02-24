@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" name="LayoutAside">
 import SvgIcon from '@/components/svgicon/index.vue'
 </script>
 

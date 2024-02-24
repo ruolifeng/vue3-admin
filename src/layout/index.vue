@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" name="Layout">
 import {defineAsyncComponent} from "vue";
 // import LayoutAside from '@/layout/layoutAside/index.vue'
 // import LayoutHeader from '@/layout/layoutHeader/index.vue'
