@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import {ref} from "vue";
 import {useRouter} from "vue-router";
-import {useFullscreen} from '@vueuse/core'
+import {useFullscreen,useDark} from '@vueuse/core'
 import {useLayoutConfigStore} from "@/stores/layoytConfig";
 import {storeToRefs} from "pinia";
 
@@ -10,11 +9,17 @@ const {isFullScreen} = storeToRefs(store);
 // 切换全屏模式
 const {isFullscreen, toggle: toggleFullscreen} = useFullscreen()
 const router = useRouter();
-const changeDark = ref(false);
-
+const isDark = useDark({
+  valueDark: 'dark', // 暗黑模式
+  valueLight: '', // 高亮模式
+  initialValue: 'dark' // 初始值
+})
 async function handleFullScreen() {
   await toggleFullscreen();
   isFullScreen.value = isFullscreen.value;
+}
+function changeDark(_isDark:boolean){
+  store.isDark = _isDark;
 }
 </script>
 
@@ -25,8 +30,8 @@ async function handleFullScreen() {
     </div>
     <div class="layout-header-user-icon">
       <el-switch
-          style="--el-switch-on-color: #333;"
-          v-model="changeDark"
+          v-model="isDark"
+          @click="changeDark"
           inline-prompt
           active-icon="ele-Moon"
           inactive-icon="ele-Sunny"
@@ -35,8 +40,8 @@ async function handleFullScreen() {
     <div>
       <el-dropdown>
     <span class="el-dropdown-link layout-header-user-icon">
-      <el-avatar class="mr5" :size="30" src="https://images.rlfit.cn/images/202310221030306.gif"/>
-      admin
+      <el-avatar class="mr5" :size="30" src="https://s11.ax1x.com/2024/02/25/pFaGHsK.png"/>
+      independent
       <SvgIcon class="mr5" name="ele-ArrowDown"/>
     </span>
         <template #dropdown>

@@ -1,0 +1,45 @@
+/* 暗黑样式
+--------------------------- */
+html[class='dark'] {
+  --rlf-color-white: #fff;
+  --rlf-color-black: #0f121d;
+  --rlf-color-primary: #1966ff;
+  --rlf-border-color: #333333;
+
+  --rlf-color-hover: #3c3c3c;
+  --rlf-color-hover-rgba: rgba(0, 0, 0, .9);
+
+  // 左侧菜单
+  --rlf-bg-menuMainColor: var(--rlf-color-black) !important;
+  --rlf-bg-menuActiveColor: var(--rlf-color-primary) !important;
+  --rlf-bg-menuHoverColor: #2e436e !important;
+
+  --rlf-text-menuMainColor: var(--rlf-color-white) !important;
+  --rlf-text-menuActiveColor: var(--rlf-color-white) !important;
+  --rlf-text-menuHoverColor: var(--rlf-color-white) !important;
+
+  // 头部导航
+  --rlf-bg-headerBarColor: var(--rlf-color-black) !important;
+
+  // 头部右侧图标光标浮动
+  --rlf-color-user-hover: var(--rlf-color-hover-rgba) !important;
+
+  // 边框
+  --rlf-border-color-light: var(--rlf-border-color) !important;
+
+
+  /* wangeditor 富文本编辑器 - css vars
+  --------------------------- */
+  --w-e-toolbar-bg-color: var(--el-bg-color) !important;
+  --w-e-toolbar-color: var(--el-text-color-primary) !important;
+  // 工具栏浮动显示
+  --w-e-toolbar-active-color: var(--el-text-color-primary) !important;
+  --w-e-toolbar-active-bg-color: var(--el-color-primary-light-9) !important;
+  --w-e-toolbar-border-color: var(--rlf-border-color) !important;
+  // 内容区域
+  --w-e-textarea-bg-color: var(--el-bg-color) !important;
+  --w-e-textarea-color: var(--el-text-color-primary) !important;
+}
+.el-switch{
+  --el-switch-on-color: red;
+}
