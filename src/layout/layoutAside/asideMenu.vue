@@ -1,5 +1,10 @@
 <script setup lang="ts" name="LayoutAside">
 import SvgIcon from '@/components/svgicon/index.vue'
+import {useLayoutConfigStore} from "@/stores/layoytConfig";
+import {storeToRefs} from "pinia";
+
+const store = useLayoutConfigStore();
+const {isCollapse} = storeToRefs(store);
 </script>
 
 <template>
@@ -9,6 +14,7 @@ import SvgIcon from '@/components/svgicon/index.vue'
         :default-active="$route.path"
         background-color="translate"
         :default-openeds="['/system']"
+        :collapse="isCollapse"
     >
       <el-menu-item index="/home">
         <SvgIcon name="ele-HomeFilled"></SvgIcon>

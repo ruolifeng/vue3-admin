@@ -14,6 +14,7 @@ import {useUI} from '@/utils/setGlobal'
 
 // 引入全局样式
 import '@/styles/index.scss';
+
 const app = createApp(App);
 
 app.use(ElementPlus, {locale: zhCn});
@@ -22,5 +23,4 @@ app.use(createPinia());
 app.use(router);
 // 注册图标
 useUI(app);
-
 app.mount('#app');
