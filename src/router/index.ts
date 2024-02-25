@@ -118,7 +118,7 @@ export const dynamicRoutes: RouteRecordRaw[] = [
                 meta: {
                     title: '作者主页',
                     icon: 'ele-Link',
-                    linkTo: 'https://rlfit.cn'
+                    linkTo: 'https://www.rlfit.cn'
                 }
             },
             // 注意，这个通配符路由应该放在所有路由配置的最后，因为 Vue Router 会按照路由配置的顺序来匹配路由，一旦找到匹配的路由，就会停止搜索。所以，如果你把通配符路由放在其他路由之前，那么所有的路径都会被它匹配，而其他的路由就永远不会被匹配到。
