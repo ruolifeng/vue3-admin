@@ -1,14 +1,26 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {useRouter} from "vue-router";
+import {useFullscreen} from '@vueuse/core'
+import {useLayoutConfigStore} from "@/stores/layoytConfig";
+import {storeToRefs} from "pinia";
 
+const store = useLayoutConfigStore();
+const {isFullScreen} = storeToRefs(store);
+// 切换全屏模式
+const {isFullscreen, toggle: toggleFullscreen} = useFullscreen()
 const router = useRouter();
-const changeDark = ref(false)
+const changeDark = ref(false);
+
+async function handleFullScreen() {
+  await toggleFullscreen();
+  isFullScreen.value = isFullscreen.value;
+}
 </script>
 
 <template>
   <div class="layout-header-user">
-    <div class="layout-header-user-icon">
+    <div class="layout-header-user-icon" @click="handleFullScreen">
       <SvgIcon name="ele-FullScreen"></SvgIcon>
     </div>
     <div class="layout-header-user-icon">
