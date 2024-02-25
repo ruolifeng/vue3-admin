@@ -9,7 +9,7 @@ declare module 'vue-router' {
         linkTo?: string; // 外链地址
         cache?: boolean; // 是否缓存，将值放在<keep-alive include="xxx">中
         hidden?: boolean; // 是否在左侧菜单中隐藏，true是隐藏
-        inBreadcrumb?: boolean; // 是否显示在面包屑中，默认是true
+        isBreadcrumb?: boolean; // 是否显示在面包屑中，默认是true
     }
 }
 /**
