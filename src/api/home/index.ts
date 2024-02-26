@@ -9,3 +9,13 @@ export function getStatistics() {
         method: 'GET',
     });
 }
+
+/**
+ * 查询分类销售数据
+ */
+export function getCategoryData() {
+    return request({
+        url: '/home/categoryData',
+        method: 'GET'
+    })
+}

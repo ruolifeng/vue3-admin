@@ -2,6 +2,7 @@
 import {defineAsyncComponent} from "vue";
 
 const StatisticsData = defineAsyncComponent(() => import('@/views/home/components/statisticsDatta.vue'));
+const Pie = defineAsyncComponent(() => import('@/views/home/echarts/pie.vue'));
 </script>
 
 <template>
@@ -10,7 +11,7 @@ const StatisticsData = defineAsyncComponent(() => import('@/views/home/component
     <el-row :gutter="15">
       <el-col :xs="24" :sm="24" :md="11" :lg="9" class="mb15">
         <el-card shadow="hover">
-          分类销售统计
+          <Pie></Pie>
         </el-card>
       </el-col>
       <el-col :xs="24" :sm="24" :md="13" :lg="15" class="mb15">
