@@ -1,26 +1,33 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
-import {useFullscreen,useDark} from '@vueuse/core'
+import {useFullscreen, useDark, useToggle} from '@vueuse/core'
 import {useLayoutConfigStore} from "@/stores/layoytConfig";
 import {storeToRefs} from "pinia";
+import {ref} from "vue";
 
+const theme = ref<boolean>(true);
 const store = useLayoutConfigStore();
 const {isFullScreen} = storeToRefs(store);
 // 切换全屏模式
 const {isFullscreen, toggle: toggleFullscreen} = useFullscreen()
 const router = useRouter();
 const isDark = useDark({
-  valueDark: 'dark', // 暗黑模式
-  valueLight: '', // 高亮模式
-  initialValue: 'dark' // 初始值
-})
+  storageKey: 'isDark',
+  initialValue: 'dark'
+});
+
 async function handleFullScreen() {
   await toggleFullscreen();
   isFullScreen.value = isFullscreen.value;
 }
-function changeDark(_isDark:boolean){
-  store.isDark = _isDark;
+
+function changeDark() {
+  console.log(theme.value)
+  toggle();
+  store.isDark = theme.value as any;
 }
+
+const toggle = useToggle(isDark);
 </script>
 
 <template>
@@ -30,7 +37,7 @@ function changeDark(_isDark:boolean){
     </div>
     <div class="layout-header-user-icon">
       <el-switch
-          v-model="isDark"
+          v-model="theme"
           @click="changeDark"
           inline-prompt
           active-icon="ele-Moon"
