@@ -25,7 +25,6 @@ export const useLayoutConfigStore = defineStore("layout", {
 nextTick(() => {
     const layoutConfig = useLayoutConfigStore();
     layoutConfig.$subscribe((mutation, state) => {
-        console.log(mutation, state)
         Local.set('layoutConfig', state);
     })
 })
