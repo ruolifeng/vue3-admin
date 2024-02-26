@@ -29,3 +29,13 @@ export function getLast30DaysSaleData() {
         method: 'GET'
     })
 }
+
+/**
+ * 获取排行前10的数据
+ */
+export function getTopData() {
+    return request({
+        url: '/home/member/top',
+        method: 'GET'
+    })
+}

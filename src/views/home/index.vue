@@ -3,6 +3,7 @@ import {defineAsyncComponent, computed} from "vue";
 import {getCategoryData, getLast30DaysSaleData} from "@/api/home";
 import {onMounted, reactive} from "vue";
 import {useLayoutConfigStore} from "@/stores/layoytConfig";
+import {getTopData} from "@/api/home";
 
 const state = reactive({
   category: {
@@ -13,12 +14,18 @@ const state = reactive({
     loading: false,
     xAxisData: [] as string[],
     data: [] as any[]
+  },
+  memberTop: {
+    loading: false,
+    xAxisData: [] as string[],
+    data: [] as any[]
   }
 });
 const layoutConfig = useLayoutConfigStore();
 onMounted(() => {
   loadCategoryData();
   loadLast30DaysSaleData();
+  loadTopData();
 })
 // 图表主题 'dark' 暗黑
 const theme = computed(() => layoutConfig.isDark ? 'dark' : '');
@@ -61,9 +68,33 @@ async function loadLast30DaysSaleData() {
   }
 }
 
+/**
+ * 查询会员消费top10
+ */
+async function loadTopData() {
+  try {
+    state.memberTop.loading = true;
+    const {data} = await getTopData();
+    // 不要直接赋值，需要先清空数据，但是直接赋值[]的话会导致在刷新页面之后无法渲染处新数据
+    state.memberTop.xAxisData.length = 0;
+    state.memberTop.data.length = 0;
+    //   将姓名和数据分别拿出来
+    data.forEach((item: any) => {
+      state.memberTop.xAxisData.push(item.name);
+      state.memberTop.data.push(item.consumeMoney);
+    })
+  } catch (error) {
+
+  } finally {
+    state.memberTop.loading = false;
+  }
+}
+
 const StatisticsData = defineAsyncComponent(() => import('@/views/home/components/statisticsDatta.vue'));
 const Pie = defineAsyncComponent(() => import('@/components/echarts/pie.vue'));
 const LineChart = defineAsyncComponent(() => import('@/components/echarts/lineChart.vue'));
+const BarCart = defineAsyncComponent(() => import('@/components/echarts/barChart.vue'));
+const GuageChart = defineAsyncComponent(() => import('@/components/echarts/guageChart.vue'));
 </script>
 
 <template>
@@ -91,15 +122,26 @@ const LineChart = defineAsyncComponent(() => import('@/components/echarts/lineCh
       </el-col>
     </el-row>
     <el-row :gutter="15">
-      <el-col :xs="24" :sm="24" :md="13" :lg="15" class="mb15">
-        <el-card shadow="hover">
-          会员消费Top10
-        </el-card>
+      <el-col v-loading="state.memberTop.loading" :xs="24" :sm="24" :md="13" :lg="15" class="mb15">
+        <!--        会员消费top10-->
+        <BarCart width="100%"
+                 height="380px"
+                 title="会员消费TOP10"
+                 :theme="theme"
+                 :bgColor="backgroundColor"
+                 :data="state.memberTop.data"
+                 :xAxisData="state.memberTop.xAxisData"
+        >
+        </BarCart>
       </el-col>
       <el-col :xs="24" :sm="24" :md="11" :lg="9" class="mb15">
-        <el-card shadow="hover">
-          气温仪表盘 ℃
-        </el-card>
+        <GuageChart width="100%"
+                    height="380px"
+                    title="仪表盘"
+                    :theme="theme"
+                    :bgColor="backgroundColor"
+                    :data="10"
+        ></GuageChart>
       </el-col>
     </el-row>
   </div>
