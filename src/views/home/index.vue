@@ -1,9 +1,13 @@
 <script setup lang="ts" name="Home">
+import {defineAsyncComponent} from "vue";
 
+const StatisticsData = defineAsyncComponent(() => import('@/views/home/components/statisticsDatta.vue'));
 </script>
 
 <template>
-  <h1>首页</h1>
+  <div>
+    <StatisticsData></StatisticsData>
+  </div>
 </template>
 
 <style scoped>
