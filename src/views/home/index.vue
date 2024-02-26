@@ -19,6 +19,10 @@ const state = reactive({
     loading: false,
     xAxisData: [] as string[],
     data: [] as any[]
+  },
+  airTemperature: {
+    loading: false,
+    data: ''
   }
 });
 const layoutConfig = useLayoutConfigStore();
@@ -26,6 +30,7 @@ onMounted(() => {
   loadCategoryData();
   loadLast30DaysSaleData();
   loadTopData();
+  loadAirTemperature();
 })
 // 图表主题 'dark' 暗黑
 const theme = computed(() => layoutConfig.isDark ? 'dark' : '');
@@ -90,6 +95,17 @@ async function loadTopData() {
   }
 }
 
+async function loadAirTemperature() {
+  try {
+    state.airTemperature.loading = true;
+    state.airTemperature.data = '37.5';
+  } catch (error) {
+
+  } finally {
+    state.airTemperature.loading = false;
+  }
+}
+
 const StatisticsData = defineAsyncComponent(() => import('@/views/home/components/statisticsDatta.vue'));
 const Pie = defineAsyncComponent(() => import('@/components/echarts/pie.vue'));
 const LineChart = defineAsyncComponent(() => import('@/components/echarts/lineChart.vue'));
@@ -134,13 +150,13 @@ const GuageChart = defineAsyncComponent(() => import('@/components/echarts/guage
         >
         </BarCart>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="11" :lg="9" class="mb15">
+      <el-col v-loading="state.airTemperature.loading" :xs="24" :sm="24" :md="11" :lg="9" class="mb15">
         <GuageChart width="100%"
                     height="380px"
                     title="仪表盘"
                     :theme="theme"
                     :bgColor="backgroundColor"
-                    :data="10"
+                    :data=state.airTemperature.data
         ></GuageChart>
       </el-col>
     </el-row>

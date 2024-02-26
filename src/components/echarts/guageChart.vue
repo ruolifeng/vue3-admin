@@ -3,13 +3,12 @@ import {markRaw, nextTick, onActivated, onBeforeUnmount, onMounted, reactive, re
 import * as echarts from "echarts";
 
 const props = withDefaults(defineProps<{
-  width?: string,
-  height?: string
-  theme?: string
-  bgColor?: string,
-  title: string,
-  subTitle?: string,
-  data: number,
+  width?: string;
+  height?: string;
+  theme?: string;
+  bgColor?: string;
+  title: string;
+  data: number; // 数据
 }>(), {
   width: '100%',
   height: '380px',
@@ -31,6 +30,7 @@ watch(() => [props.data, props.theme], ([data, theme]) => {
 function initChart() {
   if (state.nvll.indexOf(state.chart) === -1) state.chart.dispose();
   state.chart = markRaw(echarts.init(chartRef.value, props.theme));
+// 绘制图表选项
   const option = {
     backgroundColor: props.bgColor,
     title: {
@@ -126,7 +126,7 @@ function initChart() {
         ]
       }
     ]
-  };
+  }
   state.chart.setOption(option);
 }
 
@@ -152,13 +152,10 @@ onBeforeUnmount(() => {
   }
 });
 </script>
-
 <template>
   <el-card shadow="hover">
-    <div ref="chartRef" :style="{ height: props.height, width: props.width }"></div>
+    <div ref="chartRef" :style="{height: props.height, width: props.width}"></div>
   </el-card>
 </template>
-
-<style scoped>
-
+<style lang="scss" scoped>
 </style>
