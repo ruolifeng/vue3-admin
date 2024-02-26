@@ -11,7 +11,6 @@ export const useLayoutConfigStore = defineStore("layout", {
             isDark: true // 是否是黑暗模式
         }
     },
-    getters: {},
     actions: {
         // 更新状态
         updateState(state: LayoutConfigState) {

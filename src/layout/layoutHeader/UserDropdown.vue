@@ -22,7 +22,6 @@ async function handleFullScreen() {
 }
 
 function changeDark() {
-  console.log(theme.value)
   toggle();
   store.isDark = theme.value as any;
 }

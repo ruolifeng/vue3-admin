@@ -19,3 +19,13 @@ export function getCategoryData() {
         method: 'GET'
     })
 }
+
+/**
+ * 近三十天的销售数据
+ */
+export function getLast30DaysSaleData() {
+    return request({
+        url: '/home/30days/saleData',
+        method: 'GET'
+    })
+}

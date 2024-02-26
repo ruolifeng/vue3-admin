@@ -24,59 +24,57 @@ const state = reactive({
   chart: null as any, // 饼图实例
 });
 // 不要少了中括号`[ ]`
-watch(() => [props.data, props.theme], () => {
+watch(() => [props.data, props.theme], ([data, theme]) => {
 // console.log('watch', data)
 // nextTick，不然初始化时图表时，元素未绑定到 ref 上
   nextTick(() => {
     initChart();
   });
 }, {deep: true});
-
 // 初始化图表
-function initChart() {
+function initChart () {
 // 实例存在则移除
   if (state.nvll.indexOf(state.chart) === -1) state.chart.dispose();
-// 初始化echarts实例，参数2：黑暗主题 'dark'
+// 初始化echarts实例，参数2：黑暗主题 'drak'
 // 要使用 `markRaw` 返回该对象本身，而不是转为代理对象返回。防止 echarts 有些功能失效(如：
-  state.chart = markRaw(echarts.init(chartRef.value, props.theme));
+state.chart = markRaw(echarts.init(chartRef.value, props.theme));
 // 绘制图表选项
-  const option = {
-    backgroundColor: props.background,
-    title: {
-      text: props.title,
-      subtext: props.subtitle, // 小标题
-      x: 'left',
-    },
-    tooltip: {
-      trigger: 'item' // 图表块，鼠标放上云显示详情
-    },
-    series: [
-      {
-        type: 'pie', // 饼状图
-        name: '单位：元', //鼠标放上去显示文字
-        radius: '60%',
-        top: 20,
+const option = {
+  backgroundColor: props.background,
+  title: {
+    text: props.title,
+    subtext: props.subtitle, // 小标题
+    x: 'left',
+  },
+  tooltip: {
+    trigger: 'item' // 图表块，鼠标放上云显示详情
+  },
+  series: [
+    {
+      type: 'pie', // 饼状图
+      name: '单位：元', //鼠标放上去显示文字
+      radius: '60%',
+      top: 20,
 // 图饼展示数据
-        data: props.data,
-        emphasis: {
-          itemStyle: { // 图形样式
-            shadowBlur: 10, // 图形阴影的模糊大小
-            shadowOffsetX: 0, // 阴影水平方向上的偏移距离
-            shadowColor: 'rgba(0, 0, 0, 0.5)' //阴影颜色
-          }
+      data: props.data,
+      emphasis: {
+        itemStyle: { // 图形样式
+          shadowBlur: 10, // 图形阴影的模糊大小
+          shadowOffsetX: 0, // 阴影水平方向上的偏移距离
+          shadowColor: 'rgba(0, 0, 0, 0.5)' //阴影颜色
         }
       }
-    ]
-  };
+    }
+  ]
+};
+// const {chartRef} = useEcharts({props, option})
 // 设置图表选项
   state.chart.setOption(option);
 }
-
 // 重置 echarts 图表大小
-function echartsResizeFun() {
+function echartsResizeFun () {
   state.chart && state.chart.resize();
 }
-
 onMounted(() => {
 // 监听浏览器窗口大小改变，重置图表大小
   window.addEventListener('resize', echartsResizeFun);
