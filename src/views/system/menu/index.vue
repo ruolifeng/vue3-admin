@@ -1,8 +1,9 @@
 <script setup lang="ts" name="SystemMenu">
 import {getList, deleteMenuById} from "@/api/system/menu";
-import {reactive, toRefs, onMounted, ref} from "vue";
+import {reactive, toRefs, onMounted, ref, defineAsyncComponent} from "vue";
 import {notify} from "@/utils/element";
 
+const MenuEdit = defineAsyncComponent(() => import('@/views/system/menu/components/menu-edit.vue'))
 const tableListRef = ref();
 const state = reactive({
   loading: false,
@@ -107,6 +108,8 @@ async function handleDelete(id: string) {
         </template>
       </el-table-column>
     </el-table>
+    <!--    新增编辑和弹出组件-->
+    <MenuEdit></MenuEdit>
   </div>
 </template>
 
