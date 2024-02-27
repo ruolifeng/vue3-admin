@@ -1,6 +1,7 @@
 <script setup lang="ts" name="SystemMenu">
-import {getList} from "@/api/system/menu";
+import {getList, deleteMenuById} from "@/api/system/menu";
 import {reactive, toRefs, onMounted, ref} from "vue";
+import {notify} from "@/utils/element";
 
 const tableListRef = ref();
 const state = reactive({
@@ -36,12 +37,21 @@ function handleAdd(id?: string) {
   console.log(id)
 }
 
-function handleEdit(rwo: SysMenuType) {
+async function handleEdit(id: string) {
 
 }
 
-function handleDelete(id?: string) {
+async function handleDelete(id: string) {
+  try {
+    state.loading = true
+    await deleteMenuById(id)
+    notify('删除成功！', {type: "success"})
+    await queryData()
+  } catch (error) {
 
+  } finally {
+    state.loading = false
+  }
 }
 </script>
 
@@ -50,14 +60,6 @@ function handleDelete(id?: string) {
     <el-form :inline="true" :model="query" class="demo-form-inline">
       <el-form-item label="菜单名称">
         <el-input v-model="query.keyWord" placeholder="请输入菜单名称" clearable/>
-      </el-form-item>
-      <el-form-item label="Activity time">
-        <el-date-picker
-            v-model="query.date"
-            type="date"
-            placeholder="Pick a date"
-            clearable
-        />
       </el-form-item>
       <el-form-item>
         <el-button icon="ele-Search" @click="queryData()" type="primary">查询</el-button>
@@ -97,8 +99,11 @@ function handleDelete(id?: string) {
           </el-button>
           <el-button @click.stop="handleEdit(row.id)" v-if="row.type != 2" icon="ele-Edit" type="warning" link>修改
           </el-button>
-          <el-button @click.stop="handleDelete(row.id)" v-if="row.type != 2" icon="ele-Delete" type="danger" link>删除
-          </el-button>
+          <el-popconfirm @confirm="handleDelete(row.id)" :title="`确定永久删除【${row.meta?.title}】吗？`">
+            <template #reference>
+              <el-button @click.stop icon="ele-Delete" type="danger" link>删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>

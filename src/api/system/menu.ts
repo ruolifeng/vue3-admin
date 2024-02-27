@@ -13,3 +13,15 @@ export function getList(query: SysMenuQuery) {
         data: query
     })
 }
+
+
+/**
+ * 删除菜单数据
+ * @param id 菜单id
+ */
+export function deleteMenuById(id: string) {
+    return request({
+        url: `${baseUrl}/${id}`,
+        method: 'DELETE',
+    })
+}
