@@ -2,17 +2,32 @@
 import {markRaw, nextTick, onActivated, onBeforeUnmount, onMounted, reactive, ref, watch} from "vue";
 import * as echarts from "echarts";
 
+interface lives {
+  province: string,
+  city: string,
+  adcode: string,
+  weather: string,
+  temperature: string,
+  winddirection: string,
+  windpower: string,
+  humidity: string,
+  reporttime: string,
+  temperature_float: string,
+  humidity_float: string,
+  newDate:string
+}
+
 const props = withDefaults(defineProps<{
   width?: string;
   height?: string;
   theme?: string;
   bgColor?: string;
-  title: string;
-  data: number; // 数据
+  title?: string;
+  data: lives[]; // 数据
 }>(), {
   width: '100%',
   height: '380px',
-  data: 0
+  data: () => []
 });
 const chartRef = ref();
 const state = reactive({
@@ -34,7 +49,8 @@ function initChart() {
   const option = {
     backgroundColor: props.bgColor,
     title: {
-      text: props.title,
+      text: props.data[1] +'🥱'+ props.data[0].city+'→'+props.data[0].weather,
+      subtext:'数据来自高德地图',
       x: 'left',
     },
     series: [
@@ -101,7 +117,7 @@ function initChart() {
         },
         data: [
           {
-            value: props.data
+            value: parseInt(props.data[0].temperature)
           }
         ]
       },
@@ -119,17 +135,16 @@ function initChart() {
           show: true,
           width: 8
         },
-        data: [
-          {
-            value: props.data
-          }
-        ]
+        // data: [
+        //   {
+        //     value: 1
+        //   }
+        // ]
       }
     ]
   }
   state.chart.setOption(option);
 }
-
 // 重置 echarts 图表大小
 function echartsResizeFun() {
   state.chart && state.chart.resize();

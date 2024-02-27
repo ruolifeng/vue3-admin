@@ -4,6 +4,7 @@ import {getCategoryData, getLast30DaysSaleData} from "@/api/home";
 import {onMounted, reactive} from "vue";
 import {useLayoutConfigStore} from "@/stores/layoytConfig";
 import {getTopData} from "@/api/home";
+import {getAir} from "@/api/home";
 
 const state = reactive({
   category: {
@@ -22,7 +23,7 @@ const state = reactive({
   },
   airTemperature: {
     loading: false,
-    data: ''
+    data: [] as any[]
   }
 });
 const layoutConfig = useLayoutConfigStore();
@@ -95,10 +96,17 @@ async function loadTopData() {
   }
 }
 
+// 获取天气信息
+
 async function loadAirTemperature() {
   try {
     state.airTemperature.loading = true;
-    state.airTemperature.data = '37.5';
+    const {lives} = await getAir();
+    state.airTemperature.data = lives;
+    // 时间格式化
+    const date = new Date(state.airTemperature.data[0].reporttime);
+    const newData = date.toLocaleDateString();
+    state.airTemperature.data.push(newData);
   } catch (error) {
 
   } finally {

@@ -39,3 +39,13 @@ export function getTopData() {
         method: 'GET'
     })
 }
+
+/**
+ * 天气查询
+ */
+export function getAir() {
+    return request({
+        url: 'https://restapi.amap.com/v3/weather/weatherInfo?key=ef088e63e91de87233b59453cf87d32a&city=110000',
+        method: 'GET'
+    })
+}

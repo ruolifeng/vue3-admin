@@ -26,10 +26,12 @@ request.interceptors.request.use((config) => {
 // 响应拦截器
 request.interceptors.response.use((response) => {
     const res = response.data;
+    return res;
     // 响应正常返回响应结果给接口调用方
-    if (res.code === 20000) {
-        return res;
-    }
+    // if (res.code === 20000 || res.infocode === 10000) {
+    //     return res;
+    // }
+    // 处理天气
     // 响应错误弹出错误提示
     ElMessage.error(res.message);
 }, (error) => {
