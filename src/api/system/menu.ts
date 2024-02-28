@@ -35,3 +35,15 @@ export function getMenuSelectAll() {
         method: 'GET',
     })
 }
+
+
+/**
+ * 新增菜单
+ */
+export function addMenu(data:SysMenuType) {
+    return request({
+        url: `${baseUrl}`,
+        method: 'POST',
+        data: data
+    })
+}

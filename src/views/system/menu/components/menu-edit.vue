@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {reactive, ref, toRefs} from 'vue'
-import {getMenuSelectAll} from "@/api/system/menu";
+import {getMenuSelectAll, addMenu} from "@/api/system/menu";
+import {notify} from "@/utils/element";
 // 表单ref
 const formRef = ref()
 
@@ -56,13 +57,60 @@ function open(type: FormType, title: string, data = {} as any){
  *提交表单
  */
 function submitForm(){
+  formRef.value.validate((valid: boolean) => {
+    if (!valid) return
 
+    // 校验通过，如果是按钮（type='2'）将对应不需要的属性将他清空
+    if (state.formData.type === '2'){
+      state.formData.path = ''
+      state.formData.name = ''
+      state.formData.redirect = ''
+      state.formData.component = ''
+      state.formData.meta.icon = ''
+      state.formData.meta.hidden = false
+      state.formData.meta.cache = false
+      state.formData.meta.isBreadcrumb = false
+      state.formData.meta.linkTo = ''
+      state.formData.isLink = false
+    }
+
+    // 提交数据
+    submitData()
+  })
+}
+
+/**
+ * 调用接口提交数据
+ */
+async function submitData(){
+  try {
+    state.loading = true
+    let resp: any
+    if (state.ClickType === 'edit'){
+      // 修改
+    }else {
+     // 新增
+      resp = await addMenu(state.formData)
+    }
+    state.loading = false
+    if (resp.code != 20000) return
+    notify('操作成功',{type: 'success'})
+    // 关闭窗口
+    close()
+    // 触发父组件加载数据
+    emit('refresh')
+  } catch (error){
+
+  } finally {
+    state.loading = false
+  }
 }
 
 async function loadMenuSelect(){
   try {
     state.loading = true
     const {data} = await getMenuSelectAll()
+    console.log(data)
     state.menuList = data
   }catch (error){
 
