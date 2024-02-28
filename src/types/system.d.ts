@@ -33,3 +33,20 @@ declare interface SysMenuType {
     children: SysMenuType[]
 }
 
+/**
+ * 角色查询条件
+ */
+declare interface SysRoleQuery {
+    name: string // 角色名称
+}
+
+// 角色实体类型
+declare interface SysRoleType {
+    id: string,
+    roleName: string,
+    roleCode: string,
+    status: boolean,
+    remark: string,
+    createTime: string,
+    updateTime: string,
+}

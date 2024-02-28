@@ -95,7 +95,7 @@ async function handleDelete(id: string) {
       <el-table-column prop="code" label="权限标识" header-align="center" align="left" show-overflow-tooltip/>
       <el-table-column prop="type" label="类型" header-align="center" align="center">
         <template #default="{row}">
-          <el-tag effect="plain" :type="row.type == 1? '':'success'">{{ row.type == '1' ? '菜单' : '按钮' }}</el-tag>
+          <el-tag effect="plain" :type="row.type == 1? 'primary':'success'">{{ row.type == '1' ? '菜单' : '按钮' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="sort" label="排序" header-align="center" align="center"/>
