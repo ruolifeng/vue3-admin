@@ -28,6 +28,9 @@ const {formData, visible,title,ClickType,loading} = {...toRefs(state)}
 
 // 关闭窗口之前触发的方法
 function close() {
+  if (state.loading)return
+  // 清除校验提示
+  formRef.value?.resetFields()
   visible.value = false
 }
 
@@ -46,6 +49,13 @@ function open(type: FormType, title: string, data = {} as any){
   state.visible = true
 }
 
+/**
+ *提交表单
+ */
+function submitForm(){
+
+}
+
 // 导出提供给父组件使用
 defineExpose({
   open,
@@ -60,7 +70,7 @@ function changeIsLink(val: boolean) {
 
 <template>
   <el-drawer v-model="visible" :title="`${title}菜单`" :direction="'rtl'" :before-close="close" size="650px">
-    <el-form ref="formRef" :model="formData" label-width="85px" label-position="right" status-icon label-suffix=":">
+    <el-form v-loading="loading" ref="formRef" :model="formData" label-width="85px" label-position="right" status-icon label-suffix=":">
       <el-form-item label="上级菜单" prop="parentId">
         <!--        级联选择器-->
       </el-form-item>
@@ -138,8 +148,8 @@ function changeIsLink(val: boolean) {
     </el-form>
     <template #footer>
       <el-row>
-        <el-button type="danger">取消</el-button>
-        <el-button type="success">保存</el-button>
+        <el-button type="danger" @click="close">取消</el-button>
+        <el-button type="success" @click="submitForm" :loading="loading">保存</el-button>
       </el-row>
     </template>
   </el-drawer>
