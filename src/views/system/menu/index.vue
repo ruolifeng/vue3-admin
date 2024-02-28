@@ -5,6 +5,10 @@ import {notify} from "@/utils/element";
 
 const MenuEdit = defineAsyncComponent(() => import('@/views/system/menu/components/menu-edit.vue'))
 const tableListRef = ref();
+
+// 修改菜单ref
+const editRef = ref()
+
 const state = reactive({
   loading: false,
   query: {
@@ -36,6 +40,7 @@ function toggleRow(row: SysMenuType) {
 
 function handleAdd(id?: string) {
   console.log(id)
+  editRef.value.open('add', '新增', {id})
 }
 
 async function handleEdit(id: string) {
@@ -109,7 +114,7 @@ async function handleDelete(id: string) {
       </el-table-column>
     </el-table>
     <!--    新增编辑和弹出组件-->
-    <MenuEdit></MenuEdit>
+    <MenuEdit ref="editRef" @refresh="queryData"></MenuEdit>
   </div>
 </template>
 

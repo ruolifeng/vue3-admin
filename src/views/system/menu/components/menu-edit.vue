@@ -1,37 +1,65 @@
 <script setup lang="ts">
 import {reactive, ref, toRefs} from 'vue'
 
-const visible = ref(true)
-const state = reactive({
-  formData: {
-    type: '',
-    path: '',
-    name: '',
-    redirect: '',
-    isLink:'',
-    meta: {
-      // title: '',
-      // code: '',
-      // icon: '',
-      // hidden: '',
-      // cache:'',
-      // linkTo:''
-    } as SysMenuType
+// 表单ref
+const formRef = ref()
+
+// 初始数据
+const initData = {
+  type: '1',
+  sort: 1,
+  meta: {
+    hidden: false,
+    cache: true,
+    isBreadcrumb: true,
+    isLink: false
   }
+}
+const state = reactive({
+  title: '新增', //编辑或者是新增
+  ClickType: 'add' as FormType,
+  loading: false,
+  visible: false,
+  formData: {
+    meta: {}
+  } as SysMenuType
 })
-const {formData} = {...toRefs(state)}
+const {formData, visible,title,ClickType,loading} = {...toRefs(state)}
 
 // 关闭窗口之前触发的方法
 function close() {
   visible.value = false
 }
-function changeIsLink(val:boolean){
+
+/**
+ *
+ * @param type 打开表单时候判断类型是Add还是edit
+ * @param title 打开表单时候传递的title数据
+ * @param data 初始表单数据（编辑时可以传递修改的数据）
+ */
+function open(type: FormType, title: string, data = {} as any){
+  state.ClickType = type
+  state.title = title
+
+  // 合并初始数据
+  state.formData = {...initData, ...data}
+  state.visible = true
+}
+
+// 导出提供给父组件使用
+defineExpose({
+  open,
+})
+
+// 刷新事件
+const emit = defineEmits(['refresh'])
+function changeIsLink(val: boolean) {
   state.formData.meta.linkTo = ''
 }
 </script>
 
 <template>
-  <el-drawer v-model="visible" title="新增菜单" :direction="'rtl'" :before-close="close" size="650px">
+  <el-drawer v-model="visible" :title="`${title}菜单`" :direction="'rtl'" :before-close="close" size="650px">
     <el-form ref="formRef" :model="formData" label-width="85px" label-position="right" status-icon label-suffix=":">
       <el-form-item label="上级菜单" prop="parentId">
         <!--        级联选择器-->
@@ -53,10 +81,12 @@ function changeIsLink(val:boolean){
         <el-input v-model="formData.name" placeholder="请输入路由名称" maxlength="50" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="菜单图标" prop="meta.icon">
-        <el-input v-model="formData.meta.icon" placeholder="请输入菜单图标ele-" maxlength="100" show-word-limit></el-input>
+        <el-input v-model="formData.meta.icon" placeholder="请输入菜单图标ele-" maxlength="100"
+                  show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="重定向" prop="redirect">
-        <el-input v-model="formData.redirect" placeholder="请输入路由重定向地址" maxlength="200" show-word-limit></el-input>
+        <el-input v-model="formData.redirect" placeholder="请输入路由重定向地址" maxlength="200"
+                  show-word-limit></el-input>
       </el-form-item>
       <el-row>
         <el-col :span="12">
@@ -76,38 +106,40 @@ function changeIsLink(val:boolean){
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="显示导航" prop="meta.isBreadcrumd">
-        <el-radio-group v-model="formData.meta.isBreadcrumd">
+      <el-form-item label="显示导航" prop="meta.isBreadcrumb">
+        <el-radio-group v-model="formData.meta.isBreadcrumb">
           <el-radio :label="false">不显示</el-radio>
           <el-radio :label="true">显示</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-row>
         <el-col :span="8">
-      <el-form-item label="是否外链" prop="isLink">
-        <el-radio-group v-model="formData.isLink">
-          <el-radio :label="false" @click="changeIsLink">否</el-radio>
-          <el-radio :label="true">是</el-radio>
-        </el-radio-group>
-      </el-form-item>
+          <el-form-item label="是否外链" prop="isLink">
+            <el-radio-group v-model="formData.isLink">
+              <el-radio :label="false" @click="changeIsLink">否</el-radio>
+              <el-radio :label="true">是</el-radio>
+            </el-radio-group>
+          </el-form-item>
         </el-col>
         <el-col :span="16">
-      <el-form-item label="外链地址" prop="isLink" v-if="formData.isLink">
-        <el-input v-model="formData.meta.linkTo" placeholder="请输入外链地址" maxlength="300" show-word-limit></el-input>
-      </el-form-item>
+          <el-form-item label="外链地址" prop="isLink" v-if="formData.isLink">
+            <el-input v-model="formData.meta.linkTo" placeholder="请输入外链地址" maxlength="300"
+                      show-word-limit></el-input>
+          </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="排序" prop="meta.sort">
-        <el-input-number v-model="formData.meta.sort" :min="1" max="100000" style="width: 300px"></el-input-number>
+      <el-form-item label="排序" prop="sort">
+        <el-input-number v-model="formData.sort" :min="1" max="100000" style="width: 300px"></el-input-number>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
-        <el-input v-model="formData.remark" type="textarea" placeholder="请输入备注信息" maxlength="50" show-word-limit></el-input>
+        <el-input v-model="formData.remark" type="textarea" placeholder="请输入备注信息" maxlength="50"
+                  show-word-limit></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
       <el-row>
-        <el-button>取消</el-button>
-        <el-button type="primary">保存</el-button>
+        <el-button type="danger">取消</el-button>
+        <el-button type="success">保存</el-button>
       </el-row>
     </template>
   </el-drawer>
