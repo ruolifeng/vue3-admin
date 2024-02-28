@@ -25,3 +25,13 @@ export function deleteMenuById(id: string) {
         method: 'DELETE',
     })
 }
+
+/**
+ * 查询类型为菜单的所有数据
+ */
+export function getMenuSelectAll() {
+    return request({
+        url: `${baseUrl}/select`,
+        method: 'GET',
+    })
+}

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {reactive, ref, toRefs} from 'vue'
-
+import {getMenuSelectAll} from "@/api/system/menu";
 // 表单ref
 const formRef = ref()
 
@@ -18,13 +18,14 @@ const initData = {
 const state = reactive({
   title: '新增', //编辑或者是新增
   ClickType: 'add' as FormType,
+  menuList: [],
   loading: false,
   visible: false,
   formData: {
     meta: {}
   } as SysMenuType
 })
-const {formData, visible,title,ClickType,loading} = {...toRefs(state)}
+const {formData, visible,title,ClickType,loading,menuList} = {...toRefs(state)}
 
 // 关闭窗口之前触发的方法
 function close() {
@@ -47,6 +48,8 @@ function open(type: FormType, title: string, data = {} as any){
   // 合并初始数据
   state.formData = {...initData, ...data}
   state.visible = true
+  // 查询所有菜单项
+  loadMenuSelect();
 }
 
 /**
@@ -56,6 +59,17 @@ function submitForm(){
 
 }
 
+async function loadMenuSelect(){
+  try {
+    state.loading = true
+    const {data} = await getMenuSelectAll()
+    state.menuList = data
+  }catch (error){
+
+  }finally {
+    state.loading = false
+  }
+}
 // 导出提供给父组件使用
 defineExpose({
   open,
@@ -72,7 +86,8 @@ function changeIsLink(val: boolean) {
   <el-drawer v-model="visible" :title="`${title}菜单`" :direction="'rtl'" :before-close="close" size="650px">
     <el-form v-loading="loading" ref="formRef" :model="formData" label-width="85px" label-position="right" status-icon label-suffix=":">
       <el-form-item label="上级菜单" prop="parentId">
-        <!--        级联选择器-->
+        <!--        级联选择器 checkStrictly: 每个项都可以作为单选 emitPath: 是否只返回选中的节点-->
+        <el-cascader v-model="formData.parentId" :options="menuList" :props="{checkStrictly: true, value:'id', label:'title', children:'children', emitPath:'false'}" clearable class="w100" />
       </el-form-item>
       <el-form-item label="菜单类型" prop="type">
         <el-radio v-model="formData.type" label="1" border>菜单</el-radio>
@@ -81,9 +96,12 @@ function changeIsLink(val: boolean) {
       <el-form-item label="菜单名称" prop="meta.title" :rules="{required:true,message:'请输入菜单名称',trigger:'blur'}">
         <el-input v-model="formData.meta.title" placeholder="请输入菜单名称" maxlength="50" show-word-limit></el-input>
       </el-form-item>
-      <el-form-item label="权限标识" prop="code">
-        <el-input v-model="formData.code" placeholder="请输入权限标识" maxlength="50" show-word-limit></el-input>
-      </el-form-item>
+      <template v-if="formData.type == '2'">
+        <el-form-item label="权限标识" prop="code">
+          <el-input v-model="formData.code" placeholder="请输入权限标识" maxlength="50" show-word-limit></el-input>
+        </el-form-item>
+      </template>
+      <template v-else>
       <el-form-item label="路由地址" prop="path" :rules="{required:true,message:'请输入路由地址path',trigger:'blur'}">
         <el-input v-model="formData.path" placeholder="请输入路由地址path" maxlength="200" show-word-limit></el-input>
       </el-form-item>
@@ -138,6 +156,7 @@ function changeIsLink(val: boolean) {
           </el-form-item>
         </el-col>
       </el-row>
+      </template>
       <el-form-item label="排序" prop="sort">
         <el-input-number v-model="formData.sort" :min="1" max="100000" style="width: 300px"></el-input-number>
       </el-form-item>
