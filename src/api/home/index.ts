@@ -45,7 +45,7 @@ export function getTopData() {
  */
 export function getAir() {
     return request({
-        url: 'https://restapi.amap.com/v3/weather/weatherInfo?key=ef088e63e91de87233b59453cf87d32a&city=110000',
+        url: 'https://restapi.amap.com/v3/weather/weatherInfo?key=ef088e63e91de87233b59453cf87d32a&city=330000',
         method: 'GET'
     })
 }

@@ -43,8 +43,8 @@ function handleAdd(id?: string) {
   editRef.value.open('add', '新增', {id})
 }
 
-async function handleEdit(id: string) {
-
+async function handleEdit(row: SysMenuType) {
+  editRef.value.open('edit', '修改', JSON.parse(JSON.stringify(row)))
 }
 
 async function handleDelete(id: string) {
@@ -103,7 +103,7 @@ async function handleDelete(id: string) {
         <template #default="{row}">
           <el-button @click.stop="handleAdd(row.id)" v-if="row.type != 2" icon="ele-Plus" type="primary" link>新增下级
           </el-button>
-          <el-button @click.stop="handleEdit(row.id)" v-if="row.type != 2" icon="ele-Edit" type="warning" link>修改
+          <el-button @click.stop="handleEdit(row)" v-if="row.type != 2" icon="ele-Edit" type="warning" link>修改
           </el-button>
           <el-popconfirm @confirm="handleDelete(row.id)" :title="`确定永久删除【${row.meta?.title}】吗？`">
             <template #reference>

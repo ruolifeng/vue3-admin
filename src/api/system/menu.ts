@@ -47,3 +47,14 @@ export function addMenu(data:SysMenuType) {
         data: data
     })
 }
+
+/**
+ * 修改菜单
+ */
+export function updateMenu(data:SysMenuType) {
+    return request({
+        url: `${baseUrl}`,
+        method: 'PUT',
+        data: data
+    })
+}

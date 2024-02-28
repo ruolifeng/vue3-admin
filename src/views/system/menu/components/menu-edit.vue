@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {reactive, ref, toRefs} from 'vue'
-import {getMenuSelectAll, addMenu} from "@/api/system/menu";
+import {getMenuSelectAll, addMenu, updateMenu} from "@/api/system/menu";
 import {notify} from "@/utils/element";
 // 表单ref
 const formRef = ref()
@@ -85,9 +85,10 @@ function submitForm(){
 async function submitData(){
   try {
     state.loading = true
-    let resp: any
+    let resp: any = {}
     if (state.ClickType === 'edit'){
       // 修改
+      resp = await updateMenu(state.formData)
     }else {
      // 新增
       resp = await addMenu(state.formData)
