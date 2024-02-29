@@ -39,7 +39,6 @@ function toggleRow(row: SysMenuType) {
 }
 
 function handleAdd(id?: string) {
-  console.log(id)
   editRef.value.open('add', '新增', {id})
 }
 

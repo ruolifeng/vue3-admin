@@ -1,9 +1,10 @@
 <script setup lang="ts" name="SystemRole">
 import {getPageList, deleteRoleById} from "@/api/system/role";
 
-import {reactive, toRefs, onMounted, nextTick} from "vue";
+import {reactive, toRefs, onMounted, nextTick, defineAsyncComponent, ref} from "vue";
 import {notify} from "@/utils/element";
 
+const RoleEdit = defineAsyncComponent(()=> import('@/views/system/role/components/role-edit.vue'))
 // 定义状态
 const state = reactive({
   loading: false,
@@ -19,7 +20,7 @@ const state = reactive({
 });
 
 const {loading, page, query, tableList} = toRefs(state);
-
+const editRef = ref();
 onMounted(() => {
   queryData()
 });
@@ -78,7 +79,7 @@ async function handleDelete(id: string) {
  * 新增
  */
 function handleAdd() {
-  console.log('新增');
+  editRef.value.open('add', '新增');
 }
 
 /**
@@ -93,6 +94,7 @@ function handleQuery(){
 
 <template>
   <div class="layout-padding">
+    <RoleEdit ref="editRef" @refresh="queryData"></RoleEdit>
     <el-form :inline="true" :model="query" class="demo-form-inline">
       <el-form-item label="角色名称">
         <el-input v-model="query.name" maxlength="30" placeholder="请输入角色名称" clearable/>

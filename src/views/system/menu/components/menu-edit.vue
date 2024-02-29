@@ -111,7 +111,6 @@ async function loadMenuSelect(){
   try {
     state.loading = true
     const {data} = await getMenuSelectAll()
-    console.log(data)
     state.menuList = data
   }catch (error){
 
@@ -207,7 +206,7 @@ function changeIsLink(val: boolean) {
       </el-row>
       </template>
       <el-form-item label="排序" prop="sort">
-        <el-input-number v-model="formData.sort" :min="1" max="100000" style="width: 300px"></el-input-number>
+        <el-input-number v-model="formData.sort" :min="1" style="width: 300px"></el-input-number>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input v-model="formData.remark" type="textarea" placeholder="请输入备注信息" maxlength="50"
