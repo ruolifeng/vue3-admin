@@ -2,7 +2,8 @@
 
 import {getList} from "@/api/system/menu";
 import {ref, reactive, toRefs} from "vue";
-import {getMenuIdsByRoleId} from "@/api/system/role";
+import {getMenuIdsByRoleId,saveRoleMenu} from "@/api/system/role";
+import {notify} from "@/utils/element";
 
 const state = reactive({
   visible: false,
@@ -11,7 +12,8 @@ const state = reactive({
   menuList: [] as SysMenuType[],
   menuIds: [] as string[], // 角色拥有的ids
   checked: false,
-  expandAll: false
+  expandAll: false,
+  submitting: false
 })
 
 const {visible,loading,role,menuList,menuIds} = toRefs(state);
@@ -44,6 +46,11 @@ async function open(role: SysRoleType){
 }
 
 function close(){
+  if (state.submitting) return;
+  state.menuIds = [];
+  state.menuList = [];
+  state.checked = false;
+  state.expandAll = false;
   state.visible = false;
 }
 
@@ -112,26 +119,52 @@ function changeTreeNodeStatus(node:any){
     }
   }
 }
+
+/**
+ * 提交表单数据
+ */
+async function submitForm(){
+  try {
+    state.submitting = true;
+    // 收集菜单ids
+    let menuIds = [] as string[];
+    const checkIds = treeRef.value.getCheckedKeys();
+    // 收集半选中
+    const parentIds = treeRef.value.getHalfCheckedKeys();
+    // 组合
+    menuIds = parentIds.concat(checkIds);
+    await saveRoleMenu(state.role.id,menuIds);
+    notify('分配权限成功',{type:"success"});
+    state.submitting = false; // 防止关闭不了窗口
+    close();
+  }catch (e){
+
+  }finally {
+    state.submitting = false;
+  }
+}
 </script>
 
 <template>
   <el-drawer v-model="visible" :title="`分配【${role.roleName}】权限`" :direction="'rtl'" :before-close="close" size="400px">
-    <el-tree ref="treeRef" :data="menuList" show-checkbox node-key="id" :props="{children:'children'}" highlight-current>
-      <template #default="{node,data}">
+    <div v-loading="state.loading">
+      <el-tree ref="treeRef" :data="menuList" show-checkbox node-key="id" :props="{children:'children'}" highlight-current :default-expand-all="state.expandAll">
+        <template #default="{node,data}">
         <span class="custom-tree-node">
 <!--          一二级菜单显示原生菜单图标-->
           <SvgIcon v-if="[1,2].includes(node.level)" :name="data.meta.icon"></SvgIcon>
-<!--          三级菜单显示菜单或者按钮图标-->
+          <!--          三级菜单显示菜单或者按钮图标-->
           <el-icon v-else>
             <ele-Menu v-if="data.type == 1"></ele-Menu>
             <ele-SwitchButton v-if="data.type == 2"></ele-SwitchButton>
           </el-icon>
           <span class="ml5">{{data.meta.title}}</span>
         </span>
-      </template>
-    </el-tree>
+        </template>
+      </el-tree>
+    </div>
     <template #footer>
-      <el-button type="success" @click="close">提交</el-button>
+      <el-button type="success" :loading="state.submitting" @click="submitForm">提交</el-button>
       <el-button type="primary" @click="handleCheckAll">全选/不选</el-button>
       <el-button type="info" @click="handleExpend">展开/收起</el-button>
       <el-button type="danger" @click="close">取消</el-button>

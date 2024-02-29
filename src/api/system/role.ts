@@ -64,3 +64,16 @@ export function getMenuIdsByRoleId(roleId:string){
         method:'GET'
     })
 }
+
+/**
+ * 保存角色权限数据
+ * @param roleId
+ * @param menuIds
+ */
+export function saveRoleMenu(roleId: string,menuIds: string[]){
+    return request({
+        url:`${baseUrl}/{roleId}/menu/ids`,
+        method:"POST",
+        data: menuIds
+    })
+}
