@@ -5,6 +5,7 @@ import {reactive, toRefs, onMounted, nextTick, defineAsyncComponent, ref} from "
 import {notify} from "@/utils/element";
 
 const RoleEdit = defineAsyncComponent(()=> import('@/views/system/role/components/role-edit.vue'))
+const Permission = defineAsyncComponent(()=> import('@/views/system/role/components/permission.vue'))
 // 定义状态
 const state = reactive({
   loading: false,
@@ -21,6 +22,7 @@ const state = reactive({
 
 const {loading, page, query, tableList} = toRefs(state);
 const editRef = ref();
+const permissionRef = ref();
 onMounted(() => {
   queryData()
 });
@@ -49,7 +51,7 @@ async function queryData() {
  * 分配权限
  */
 function handlePermission(row: SysRoleType) {
-  console.log('分配权限', row);
+  permissionRef.value.open(row);
 }
 
 /**
@@ -95,6 +97,7 @@ function handleQuery(){
 <template>
   <div class="layout-padding">
     <RoleEdit ref="editRef" @refresh="queryData"></RoleEdit>
+    <Permission ref="permissionRef"></Permission>
     <el-form :inline="true" :model="query" class="demo-form-inline">
       <el-form-item label="角色名称">
         <el-input v-model="query.name" maxlength="30" placeholder="请输入角色名称" clearable/>
