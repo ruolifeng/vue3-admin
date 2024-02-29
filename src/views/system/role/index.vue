@@ -1,7 +1,8 @@
 <script setup lang="ts" name="SystemRole">
-import {getPageList} from "@/api/system/role";
+import {getPageList, deleteRoleById} from "@/api/system/role";
 
 import {reactive, toRefs, onMounted, nextTick} from "vue";
+import {notify} from "@/utils/element";
 
 // 定义状态
 const state = reactive({
@@ -61,7 +62,16 @@ function handleEdit(row: SysRoleType) {
  * 删除
  */
 async function handleDelete(id: string) {
-  console.log('删除', id);
+  try {
+    state.loading = true;
+    await deleteRoleById(id);
+    notify('删除成功', {type: 'success'});
+    await queryData();
+  }catch (e){
+    console.log(e)
+  }finally {
+    state.loading = false;
+  }
 }
 
 /**

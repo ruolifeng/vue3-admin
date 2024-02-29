@@ -20,3 +20,14 @@ export function getPageList(query: SysRoleQuery, current = 1, size = 20){
         }
     })
 }
+
+/**
+ * 删除角色数据
+ * @param id 角色id
+ */
+export function deleteRoleById(id: string) {
+    return request({
+        url: `${baseUrl}/${id}`,
+        method: 'DELETE',
+    })
+}
