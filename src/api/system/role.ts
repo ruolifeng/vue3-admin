@@ -31,3 +31,26 @@ export function deleteRoleById(id: string) {
         method: 'DELETE',
     })
 }
+
+/**
+ * 新增角色数据
+ * @param data 角色数据
+ */
+export function addRole(data: SysRoleType) {
+    return request({
+        url: `${baseUrl}`,
+        method: 'POST',
+        data: data
+    })
+}
+
+/**
+ * 修改角色
+ */
+export function updateRole(data: SysRoleType) {
+    return request({
+        url: `${baseUrl}`,
+        method: 'PUT',
+        data: data
+    })
+}

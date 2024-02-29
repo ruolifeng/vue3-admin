@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import {reactive, ref, toRefs} from "vue";
+import {addRole, updateRole} from "@/api/system/role";
+import {notify} from "@/utils/element";
 
 const state = reactive({
   dialogVisible: false,
@@ -9,25 +11,29 @@ const state = reactive({
   formData: {} as SysRoleType
 })
 
-const {dialogVisible, title, formData, loading} = {...reactive(state)};
+const {dialogVisible, title, formData, loading} = {...toRefs(state)};
 const formRef = ref();
 const initData = {
   status: true,
-
 }
 
+// 定义事件
+const emit = defineEmits(['refresh'])
 /**
  * 关闭之前
  */
 function handleClose() {
-  state.dialogVisible = false;
+  close();
 }
 
 /**
  * 提交表单
  */
 function submitForm() {
-
+  formRef.value?.validate((valid: boolean) => {
+    if (!valid) return;
+    submitData();
+  })
 }
 
 /**
@@ -35,7 +41,7 @@ function submitForm() {
  */
 function close() {
   if (state.loading) return;
-  formRef.value?.resetField();
+  // formRef.value?.resetField();
   state.dialogVisible = false;
 }
 
@@ -44,19 +50,43 @@ function close() {
  */
 function open(type: FormType, title: string, data = {} as any) {
   state.type = type;
-  JSON.parse(JSON.stringify({...initData, data}));
+  state.formData = JSON.parse(JSON.stringify({...initData, ...data}));
   state.dialogVisible = true;
 }
 
+/**
+ * 提交数据
+ */
+async function submitData(){
+  try {
+    state.loading = true;
+    let res = {} as any;
+    if (state.type === 'edit'){
+      res = await updateRole(state.formData);
+    }else {
+      // 新增
+      res = await addRole(state.formData);
+    }
+    state.dialogVisible = false;
+    if (res.code !== 20000) return;
+    notify('操作成功',{type: "success"});
+    close();
+    emit('refresh')
+  }catch (e){
+
+  }finally {
+      state.loading = false;
+  }
+}
 defineExpose({
   open
 })
+
 </script>
 
 <template>
   <el-dialog v-model="state.dialogVisible"
              :title='title' width="500"
-             :before-close="handleClose"
              center
              draggable
              style="width: 500px"
@@ -70,7 +100,7 @@ defineExpose({
         <el-input v-model="formData.roleName" placeholder="请输入角色名称" maxlength="20" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="角色编码" prop="roleCode"
-                    :rules="{pattern: /^[a-zA-Z0-9]{2,30}$/, message:'只允许输入2-30个字母/数字/下划线！', trigger:'blur'}">
+                    :rules="{pattern: /^[a-zA-Z0-9_]{2,30}$/, message:'只允许输入2-30个字母/数字/下划线！', trigger:'blur'}">
         <el-input v-model="formData.roleCode" placeholder="请输入角色编码" maxlength="20" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="角色状态" prop="status" :rules="{required:true,message:'此为必选项！',trigger:'change'}">
@@ -87,7 +117,7 @@ defineExpose({
       </el-form-item>
     </el-form>
     <el-row justify="center" class="mt10">
-      <el-button type="info" @click="close">取消</el-button>
+      <el-button type="danger" @click="handleClose">取消</el-button>
       <el-button type="primary" @click="submitForm">保存</el-button>
     </el-row>
   </el-dialog>

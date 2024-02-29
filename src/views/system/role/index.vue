@@ -56,7 +56,7 @@ function handlePermission(row: SysRoleType) {
  * 编辑
  */
 function handleEdit(row: SysRoleType) {
-  console.log('编辑', row);
+  editRef.value.open('edit', '修改', row)
 }
 
 /**
