@@ -50,3 +50,28 @@ declare interface SysRoleType {
     createTime: string,
     updateTime: string,
 }
+
+/**
+ * 用户查询条件类型定义
+ */
+declare interface SysUserQuery {
+    keyWord: string
+}
+
+// 用户实体类型
+declare interface SysUserType {
+    id: string,
+    username: string,
+    password: string,
+    nickName: string,
+    mobile: string,
+    roleIds: string[],
+    email: string,
+    imageUrl: string,
+    remark: string,
+    accountNonExpired: boolean,
+    accountNonLocked: boolean,
+    credentialsNonExpired: boolean,
+    createTime: string,
+    updateTime: string,
+}

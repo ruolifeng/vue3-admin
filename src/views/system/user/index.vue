@@ -1,5 +1,5 @@
 <script setup lang="ts" name="SystemUser">
-
+import {deleteUserById,getPageList} from "@/api/system/user";
 </script>
 
 <template>
