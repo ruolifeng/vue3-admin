@@ -54,3 +54,13 @@ export function updateRole(data: SysRoleType) {
         data: data
     })
 }
+
+/**
+ * 根据角色id查询次角色所拥有的菜单ids
+ */
+export function getMenuIdsByRoleId(roleId:string){
+    return request({
+        url:`${baseUrl}/${roleId}/menu/ids`,
+        method:'GET'
+    })
+}

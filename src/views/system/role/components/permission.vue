@@ -2,15 +2,20 @@
 
 import {getList} from "@/api/system/menu";
 import {ref, reactive, toRefs} from "vue";
+import {getMenuIdsByRoleId} from "@/api/system/role";
 
 const state = reactive({
   visible: false,
   loading: false,
   role:{} as SysRoleType,
-  menuList: [] as SysMenuType[]
+  menuList: [] as SysMenuType[],
+  menuIds: [] as string[], // 角色拥有的ids
+  checked: false,
+  expandAll: false
 })
 
-const {visible,loading,role,menuList} = toRefs(state);
+const {visible,loading,role,menuList,menuIds} = toRefs(state);
+const treeRef = ref();
 // 查询所有菜单项
 async function loadMenuList(){
   try {
@@ -29,15 +34,83 @@ defineExpose({
 })
 
 // 打开窗口
-function open(role: SysRoleType){
+async function open(role: SysRoleType){
   // 点击的角色对象
   state.role = role;
   state.visible = true;
-  loadMenuList();
+  await loadMenuList();
+  await loadMenuIdsByRoleId();
+  checkOldMenuNode();
 }
 
 function close(){
   state.visible = false;
+}
+
+/**
+ * 查询角色原有的权限菜单ids
+ */
+async function loadMenuIdsByRoleId(){
+  try {
+    state.loading = true;
+    const {data} = await getMenuIdsByRoleId(state.role.id)
+    state.menuIds = data;
+  }catch (e){
+
+  }finally {
+    state.loading = false;
+  }
+}
+
+/**
+ * 进行回显已经拥有的菜单节点
+ */
+function checkOldMenuNode(){
+  const {menuIds} = state;
+  menuIds.forEach(id => {
+    // 获取节点对象
+   const node =  treeRef.value.getNode(id);
+    // 根据节点，判断是不是子节点，如果是子节点则勾选，否则则不勾选，因为父节点会自动帮我们勾上
+    if (node && node.isLeaf){
+      treeRef.value.setChecked(id,true);
+    }
+  });
+}
+
+/**
+ * 实现全选和不选
+ */
+function handleCheckAll(){
+  state.checked = !state.checked;
+  if (state.checked){
+    treeRef.value.setCheckedNodes(state.menuList);
+  }else {
+    treeRef.value.setCheckedNodes([]);
+  }
+}
+
+/**
+ * 实现展开和收起
+ */
+function handleExpend(){
+  state.expandAll = !state.expandAll;
+  changeTreeNodeStatus(treeRef.value.store.root);
+}
+
+/**
+ * 递归所有节点将他的子节点展开
+ */
+function changeTreeNodeStatus(node:any){
+  node.expanded = state.expandAll;
+  for (let i = 0; i < node.childNodes.length; i++){
+    // 改变节点的自身expended状态
+    node.childNodes[i].expended = state.expandAll;
+    // 查询当前节点是否还存在子节点
+    if (node.childNodes[i].childNodes.length > 0){
+      // 递归此节点下的N级子节点
+      changeTreeNodeStatus(node.childNodes[i]);
+    }
+  }
 }
 </script>
 
@@ -59,8 +132,8 @@ function close(){
     </el-tree>
     <template #footer>
       <el-button type="success" @click="close">提交</el-button>
-      <el-button type="primary" @click="close">全选/不选</el-button>
-      <el-button @click="close">展开/收起</el-button>
+      <el-button type="primary" @click="handleCheckAll">全选/不选</el-button>
+      <el-button type="info" @click="handleExpend">展开/收起</el-button>
       <el-button type="danger" @click="close">取消</el-button>
     </template>
   </el-drawer>
