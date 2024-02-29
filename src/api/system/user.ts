@@ -31,3 +31,26 @@ export function deleteUserById(id:string){
         method:'DELETE'
     })
 }
+
+/**
+ * 新增用户数据
+ * @param data 角色数据
+ */
+export function addRole(data: SysUserType) {
+    return request({
+        url: `${baseUrl}`,
+        method: 'POST',
+        data: data
+    })
+}
+
+/**
+ * 修改用户
+ */
+export function updateRole(data: SysUserType) {
+    return request({
+        url: `${baseUrl}`,
+        method: 'PUT',
+        data: data
+    })
+}
