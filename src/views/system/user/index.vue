@@ -1,7 +1,8 @@
 <script setup lang="ts" name="SystemUser">
 import {deleteUserById,getPageList} from "@/api/system/user";
 import {useTablePage} from '@/hooks/useTablePage'
-
+import {defineAsyncComponent} from "vue";
+const UserEdit = defineAsyncComponent(()=>import('@/views/system/user/components/user-edit.vue'))
 const {tableListRef,
   editRef,
   page,
@@ -76,6 +77,8 @@ function handlePwd(row:SysUserType){
 
     <!--    分页-->
     <m-paging :page="page" @pageChange="queryData"/>
+    <!--编辑-->
+    <UserEdit ref="editRef" @refresh="queryData"></UserEdit>
   </div>
 </template>
 

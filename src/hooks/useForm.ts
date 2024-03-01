@@ -3,8 +3,8 @@ import { notify } from "@/utils/element";
 
 interface Params {
     initData?: any, // 一般用于初始数据（新增数据时初始数据）
-    addRole: Function,
-    updateRole: Function,
+    addUser: Function,
+    updateUser: Function,
 }
 function useForm<T>(params: Params, emit?: any, props?: any) {
     const formRef = ref();
@@ -56,10 +56,10 @@ function useForm<T>(params: Params, emit?: any, props?: any) {
             state.loading = true;
             let res = {} as any;
             if (state.type === 'edit') {
-                res = await params.updateRole(state.formData);
+                res = await params.updateUser(state.formData);
             } else {
                 // 新增
-                res = await params.addRole(state.formData);
+                res = await params.addUser(state.formData);
             }
             state.dialogVisible = false;
             if (res.code !== 20000) return;

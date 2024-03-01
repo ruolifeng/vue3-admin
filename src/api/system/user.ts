@@ -36,7 +36,7 @@ export function deleteUserById(id:string){
  * 新增用户数据
  * @param data 角色数据
  */
-export function addRole(data: SysUserType) {
+export function addUser(data: SysUserType) {
     return request({
         url: `${baseUrl}`,
         method: 'POST',
@@ -47,7 +47,7 @@ export function addRole(data: SysUserType) {
 /**
  * 修改用户
  */
-export function updateRole(data: SysUserType) {
+export function updateUser(data: SysUserType) {
     return request({
         url: `${baseUrl}`,
         method: 'PUT',
