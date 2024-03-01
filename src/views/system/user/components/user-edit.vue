@@ -123,7 +123,7 @@ const disable = computed(() => type.value == 'edit')
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="用户密码" prop="password" :rules="{required: true, pattern: /^$[a-zA-Z0-9]{6,30}$/, message: '密码格式错误', trigger: 'blur'}">
+          <el-form-item label="用户密码" prop="password" :rules="{required: true, pattern: /^[a-zA-Z0-9_]{2,30}$/, message: '密码格式错误', trigger: 'blur'}">
             <el-input type="password" v-model.trim="formData.password" placeholder="请输入6~30位登录密码" maxlength="20"
                       show-word-limit :disabled="disable"></el-input>
           </el-form-item>

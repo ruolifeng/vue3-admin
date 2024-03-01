@@ -75,3 +75,12 @@ declare interface SysUserType {
     createTime: string,
     updateTime: string,
 }
+
+/**
+ * 重置密码表单数据类型
+ */
+declare interface PwdResetForm{
+    userId: string,
+    newPassword: string,
+    repPassword: string
+}

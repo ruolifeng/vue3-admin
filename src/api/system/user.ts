@@ -66,3 +66,14 @@ export function checkExist(params: {username: string} | {mobile: string}){
         params: params // 会将传递的参数转换成key=value的形式
     })
 }
+
+/**
+ * 重置用户密码
+ */
+export function updatePsw(data: PwdResetForm) {
+    return request({
+        url: `${baseUrl}/password`,
+        method: 'PUT',
+        data: data
+    })
+}

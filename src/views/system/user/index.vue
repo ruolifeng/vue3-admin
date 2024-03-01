@@ -3,6 +3,7 @@ import {deleteUserById,getPageList} from "@/api/system/user";
 import {useTablePage} from '@/hooks/useTablePage'
 import {defineAsyncComponent} from "vue";
 const UserEdit = defineAsyncComponent(()=>import('@/views/system/user/components/user-edit.vue'))
+const Password = defineAsyncComponent(()=>import('@/views/system/user/components/password.vue'))
 const {tableListRef,
   editRef,
   page,
@@ -79,6 +80,8 @@ function handlePwd(row:SysUserType){
     <m-paging :page="page" @pageChange="queryData"/>
     <!--编辑-->
     <UserEdit ref="editRef" @refresh="queryData"></UserEdit>
+<!--    重置密码-->
+    <Password></Password>
   </div>
 </template>
 
