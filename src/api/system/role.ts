@@ -77,3 +77,14 @@ export function saveRoleMenu(roleId: string,menuIds: string[]){
         data: menuIds
     })
 }
+
+
+/**
+ * 查询所有角色用于分配下拉框
+ */
+export function getRoleList(){
+    return request({
+        url: `${baseUrl}/list`,
+        method:"GET"
+    })
+}

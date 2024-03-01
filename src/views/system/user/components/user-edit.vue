@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {useForm} from '@/hooks/useForm'
 import {addUser, updateUser} from "@/api/system/user";
+import { getRoleList } from "@/api/system/role";
+import {ref, watch} from "vue";
 
 const emit = defineEmits(['refresh'])
 const initData = {
@@ -24,6 +26,30 @@ const {
 
 defineExpose({
   open
+})
+
+// 角色选择下拉框数据
+const roleOption = ref<[]>([])
+
+async function loadRoleList(){
+  try {
+    loading.value = true;
+    const {data} = await getRoleList();
+    if (data && data.length >0){
+    //   转换成下拉框的目标类型数据
+      roleOption.value = data.map((item:any) => ({value: item.id, label: item.roleName}))
+    }else {
+      roleOption.value = [];
+    }
+  }catch (e){}finally {
+    loading.value = false;
+  }
+}
+
+// 监听打开窗口时进行逻辑处理
+watch(() => dialogVisible.value,(value) => {
+  if (!value) return;
+  loadRoleList();
 })
 </script>
 
@@ -68,6 +94,13 @@ defineExpose({
         <el-col :span="12">
           <el-form-item label="分配角色" prop="roleIds">
             <!--        下拉框实现-->
+            <el-select-v2
+                v-model="formData.roleIds"
+                :options="roleOption"
+                placeholder="请选择用户绑定的角色"
+                style="width: 240px"
+                multiple
+            />
           </el-form-item>
         </el-col>
         <el-col :span="12">
