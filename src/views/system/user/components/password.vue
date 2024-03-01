@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import {updatePsw} from "@/api/system/user";
 import {reactive, ref, toRefs} from "vue";
+import {notify} from "@/utils/element";
 const state = reactive({
-  visible: true,
+  visible: false,
   loading: false,
-  formData: {} as PwdResetForm
+  formData: {} as PwdResetForm,
+  user: {} as SysUserType
 })
 const formRef = ref()
-const {visible,loading,formData} = toRefs(state)
+const {visible,loading,formData,user} = toRefs(state)
 
 const close = ()=>{
   if (state.loading)return
+  formRef.value?.resetFields
   state.visible = false;
 }
 
@@ -21,15 +24,36 @@ const passwordValidator =  (rule:any, value:string, callback:Function)=>{
 }
 
 const submitForm = () =>{
-  formRef.value.validate((valid: boolean) => {
+  formRef.value.validate(async (valid: boolean) => {
     if (!valid) return
+    try {
+      state.loading = true
+      await updatePsw(state.formData)
+      state.loading = false
+      notify('密码重置成功', {type: 'success'})
+      close()
+    }catch (e){
+
+    }finally {
+      state.loading = false
+    }
   })
 }
+
+const open = (row: SysUserType)=>{
+  state.user = row
+  state.formData.userId = row.id
+  state.visible = true;
+}
+
+defineExpose({
+  open
+})
 </script>
 
 <template>
   <el-dialog v-model="visible"
-             title="重置密码" width="600"
+             :title="`重置【${user.nickName}】密码`" width="600"
              center
              draggable
              style="width: 500px"

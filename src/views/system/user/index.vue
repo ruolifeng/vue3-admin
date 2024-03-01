@@ -1,7 +1,7 @@
 <script setup lang="ts" name="SystemUser">
 import {deleteUserById,getPageList} from "@/api/system/user";
 import {useTablePage} from '@/hooks/useTablePage'
-import {defineAsyncComponent} from "vue";
+import {defineAsyncComponent, ref} from "vue";
 const UserEdit = defineAsyncComponent(()=>import('@/views/system/user/components/user-edit.vue'))
 const Password = defineAsyncComponent(()=>import('@/views/system/user/components/password.vue'))
 const {tableListRef,
@@ -16,12 +16,12 @@ const {tableListRef,
   handleDelete,
   handleQuery
 } = useTablePage<SysUserType, SysUserQuery>({getPageList: getPageList,deleteRoleById: deleteUserById});
-
+const passwordRef = ref()
 /**
  * 重置密码
  */
 function handlePwd(row:SysUserType){
-
+  passwordRef.value.open(row)
 }
 </script>
 
@@ -81,7 +81,7 @@ function handlePwd(row:SysUserType){
     <!--编辑-->
     <UserEdit ref="editRef" @refresh="queryData"></UserEdit>
 <!--    重置密码-->
-    <Password></Password>
+    <Password ref="passwordRef"></Password>
   </div>
 </template>
 
