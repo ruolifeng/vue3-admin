@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import {useForm} from '@/hooks/useForm'
-import {addUser, updateUser} from "@/api/system/user";
+import {addUser, updateUser, checkExist} from "@/api/system/user";
 import { getRoleList } from "@/api/system/role";
-import {ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
+import {isMainAccount, isMobile} from "@/utils/validate";
 
 const emit = defineEmits(['refresh'])
 const initData = {
@@ -46,11 +47,48 @@ async function loadRoleList(){
   }
 }
 
+/**
+ * 校验用户账号是否存在
+ * @param rule
+ * @param value
+ * @param callBack
+ */
+async function usernameValidator(rule: any, value: string, callBack: Function){
+  if (!value || value == ''){
+    return callBack(new Error('用户账号为必填项'))
+  }
+  if (!isMainAccount(value)){
+    return callBack(new Error('不正确，必须是6-30位数字/字母/下划线'))
+  }
+  if (oldFormData.value.username !== value){
+    const {data} = await checkExist({username: value})
+    if (data) callBack(new Error('用户账号存在'))
+  }
+  // 通过
+  callBack();
+}
+async function mobileValidator(rule: any, value: string, callBack: Function){
+  if (!value || value == ''){
+    return callBack();
+  }
+  if (!isMobile(value)){
+    return callBack(new Error('手机号码格式不正确'))
+  }
+  if (oldFormData.value.mobile !== value){
+    const {data} = await checkExist({mobile: value})
+    if (data) callBack(new Error('用户手机号存在'))
+  }
+  // 通过
+  callBack();
+}
 // 监听打开窗口时进行逻辑处理
 watch(() => dialogVisible.value,(value) => {
   if (!value) return;
   loadRoleList();
 })
+
+// 是否禁用密码框
+const disable = computed(() => type.value == 'edit')
 </script>
 
 <template>
@@ -73,22 +111,21 @@ watch(() => dialogVisible.value,(value) => {
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="用户手机号" prop="mobile">
-            <el-input v-model.trim="formData.username" placeholder="请输入用户手机号" maxlength="20" show-word-limit
+          <el-form-item label="用户账号" prop="username" :rules="{required: true, validator: usernameValidator, trigger: 'blur'}">
+            <el-input v-model.trim="formData.username" placeholder="请输入用户账号" maxlength="20" show-word-limit
                       clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="用户手机号" prop="mobile">
-            <el-input v-model.trim="formData.username" placeholder="请输入用户手机号" maxlength="20" show-word-limit
+          <el-form-item label="用户手机号" prop="mobile" :rules="{validator: mobileValidator, trigger: 'blur'}">
+            <el-input v-model.trim="formData.mobile" placeholder="请输入用户手机号" maxlength="20" show-word-limit
                       clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="用户密码" prop="password"
-                        :rules="{request: true, pattern: /^$[a-zA-Z0-9]{6,30}$/, message: '密码格式错误', trigger: 'blur'}">
-            <el-input v-model.trim="formData.password" placeholder="请输入6~30位登录密码" maxlength="20"
-                      show-word-limit></el-input>
+          <el-form-item label="用户密码" prop="password" :rules="{required: true, pattern: /^$[a-zA-Z0-9]{6,30}$/, message: '密码格式错误', trigger: 'blur'}">
+            <el-input type="password" v-model.trim="formData.password" placeholder="请输入6~30位登录密码" maxlength="20"
+                      show-word-limit :disabled="disable"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">

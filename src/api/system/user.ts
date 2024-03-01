@@ -54,3 +54,15 @@ export function updateUser(data: SysUserType) {
         data: data
     })
 }
+
+/**
+ * 校验用户手机号或者账号是否存在
+ * @param params 接收两种参数
+ */
+export function checkExist(params: {username: string} | {mobile: string}){
+    return request({
+        url:`${baseUrl}/exist`,
+        method:"GET",
+        params: params // 会将传递的参数转换成key=value的形式
+    })
+}
