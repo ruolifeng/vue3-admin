@@ -5,6 +5,9 @@ import {updateUser, addUser, isExist, getCategoryList} from '@/api/goods/list';
 import {ref, watch} from "vue";
 import {pinyin} from "pinyin-pro";
 import {isCode} from "@/utils/validate";
+import type {UploadRequestHandler, UploadRequestOptions} from "element-plus";
+import {uploadImages} from "@/api/common/media";
+import {notify} from "@/utils/element";
 
 const emit = defineEmits(['refresh']);
 // 初始化数据
@@ -63,6 +66,25 @@ const codeValidator = async (rule:any, value:string, callback:Function) => {
   }
   callback();
 };
+
+// 上传图片
+async function handleUploadImage(option: UploadRequestOptions){
+  try {
+    loading.value = true;
+    const form = new FormData();
+    form.append('file', option.file);
+    form.append('data', JSON.stringify({sourceType: 'goods_img'}));
+    // 开始上传
+    const {data} = await uploadImages(form);
+    // 将上传成功的图片地址回显
+    formData.value.imageUrl = data;
+    notify('上传成功',{type:'success'})
+  }catch (e){
+
+  }finally {
+    loading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -189,6 +211,21 @@ const codeValidator = async (rule:any, value:string, callback:Function) => {
           <el-row>
             <el-form-item label="商品主图" prop="imageUrl">
               <!-- 上传商品主图 -->
+              <el-upload
+                  accept="image/png,image/jpg,image/jpeg"
+                  class="avatar-uploader"
+                  action="#"
+                  :show-file-list="false"
+                  :http-request="handleUploadImage"
+              >
+                <img v-if="formData.imageUrl" :src="formData.imageUrl" class="avatar" alt="图片" />
+                <el-icon v-else class="avatar-uploader-icon"><ele-Plus /></el-icon>
+                <template #tip>
+                  <div class="el-upload__tip">
+                    大小小于 500KB 的 JPG、PNG 文件
+                  </div>
+                </template>
+              </el-upload>
             </el-form-item>
           </el-row>
           <el-row>
@@ -205,5 +242,33 @@ const codeValidator = async (rule:any, value:string, callback:Function) => {
     </div>
   </el-drawer>
 </template>
+<style scoped>
+.avatar-uploader .avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+</style>
+
 <style>
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
+}
 </style>
