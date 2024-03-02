@@ -4,6 +4,7 @@ import useForm from '@/hooks/useForm';
 import {updateUser, addUser, isExist, getCategoryList} from '@/api/goods/list';
 import {ref, watch} from "vue";
 import {pinyin} from "pinyin-pro";
+import {isCode} from "@/utils/validate";
 
 const emit = defineEmits(['refresh']);
 // 初始化数据
@@ -49,6 +50,19 @@ function setQuickCode(name:string) {
   formData.value.quickCode =
       pinyin(name, {toneType: 'none', pattern: 'first', separator: '' }).toUpperCase();
 }
+
+// 校验商品编码是否存在
+const codeValidator = async (rule:any, value:string, callback:Function) => {
+  if (!value) return callback(new Error('商品编码为必填项！'));
+  if (!isCode(value)) return callback(new Error('只允许输入3~30位数字、字母和下划线'));
+  if(oldFormData.value.code != value) {
+// 判断字典编码是否存在
+    const {data} = await isExist({code: value});
+// 存在，则重复了
+    if(data) return callback(new Error('该商品编码已存在，请更换一个！'));
+  }
+  callback();
+};
 </script>
 
 <template>
@@ -79,7 +93,7 @@ function setQuickCode(name:string) {
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="商品编码" prop="code">
+              <el-form-item label="商品编码" prop="code" :rules="{ required: true, validator: codeValidator, trigger: 'blur' }">
                 <el-input v-model="formData.code" maxlength="30"
                           clearable placeholder="请输入(支持条码枪)">
                 </el-input>
