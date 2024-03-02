@@ -137,10 +137,23 @@ export const dynamicRoutes: RouteRecordRaw[] = [
     }
 ]
 
+//全屏显示路由布局组件，不作用到布局主区域
+const fullscreenRouts: RouteRecordRaw[] = [
+    {
+        path: '/login',
+        name: 'Login',
+        component: () => import('@/views/auth/login.vue'),
+        meta: {
+            title: '登录',
+            hidden: true
+        }
+    }
+]
+
 const router = createRouter({
     // 获取的是vite.config.ts中的环境变量的值
     history: createWebHistory(import.meta.env.BASE_URL),
-    routes: dynamicRoutes
+    routes: [...dynamicRoutes,...fullscreenRouts]
 })
 
 export default router

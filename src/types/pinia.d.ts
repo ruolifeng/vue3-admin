@@ -4,3 +4,13 @@ declare interface LayoutConfigState {
     isFullScreen: boolean, // 是否是全屏
     isDark: boolean // 是否是黑暗模式
 }
+
+declare interface LoginData {
+    username: string,
+    password: string
+}
+
+declare interface AuthState<> {
+    rememberData?: LoginData;
+    accessToken?: string
+}
