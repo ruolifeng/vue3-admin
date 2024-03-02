@@ -27,5 +27,6 @@ declare interface GoodsType {
     remark: string,
     goodsDetail: string, // 一段中文文本(10到30个字)
     createTime: string,
-    updateTime: string
+    updateTime: string,
+    loading: boolean
 }

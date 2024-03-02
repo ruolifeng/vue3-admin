@@ -1,6 +1,7 @@
 <script setup lang="ts" name="GoodsList">
-import {getPageList,deleteRoleById} from "@/api/goods/list";
+import {getPageList, deleteRoleById, updateStatus} from "@/api/goods/list";
 import {useTablePage} from '@/hooks/useTablePage'
+import {notify} from "@/utils/element";
 const {
   tableListRef,
   editRef,
@@ -14,6 +15,25 @@ const {
   handleDelete,
   handleQuery,
 } = useTablePage<GoodsType,GoodsQuery>({getPageList,deleteRoleById})
+
+/**
+ * 修改商品状态
+ */
+async function changeStatus(row: GoodsType){
+  try {
+    row.loading = true;
+    const {id, status} = row;
+    const newStatus = status === 0?0:1
+   const {code} =  await updateStatus({id, status:newStatus})
+    if (code !== 20000) return false
+    notify('更新状态成功',{type: 'success'})
+    return true
+  }catch (e){
+    return false; // 阻止切换
+  }finally {
+    row.loading = false
+  }
+}
 </script>
 
 <template>
@@ -67,7 +87,7 @@ const {
       <el-table-column align="center" label="入库时间" sortable prop="createTime" width="200"/>
       <el-table-column align="center" label="商品状态" width="110">
         <template #default="{row}">
-          <el-switch v-model="row.status" active-text="已上架" inactive-text="已下架" :active-value="1" :inactive-value="0" inline-prompt></el-switch>
+          <el-switch :loading="row.loading" v-model="row.status" active-text="已上架" inactive-text="已下架" :active-value="1" :inactive-value="0" inline-prompt :before-change="() => changeStatus(row)"></el-switch>
         </template>
       </el-table-column>
       <el-table-column fixed="right" align="center" label="操作" width="140">
