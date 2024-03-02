@@ -2,6 +2,8 @@
 import {getPageList, deleteRoleById, updateStatus} from "@/api/goods/list";
 import {useTablePage} from '@/hooks/useTablePage'
 import {notify} from "@/utils/element";
+import {defineAsyncComponent, ref} from "vue";
+const AddGoods = defineAsyncComponent(()=>import('@/views/goods/components/index.vue'))
 const {
   tableListRef,
   editRef,
@@ -104,6 +106,7 @@ async function changeStatus(row: GoodsType){
 
     <!--    分页-->
     <m-paging :page="page" @pageChange="queryData"/>
+    <AddGoods ref="editRef" @refresh="queryData"></AddGoods>
   </div>
 </template>
 

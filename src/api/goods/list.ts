@@ -40,7 +40,7 @@ export function updateStatus(data: {id: number ,status: number}){
     })
 }
 
-export function add(data: GoodsType) {
+export function addUser(data: GoodsType) {
     return request({
         url: `${baseUrl}`,
         method: 'POST',
@@ -48,7 +48,7 @@ export function add(data: GoodsType) {
     });
 }
 // 更新
-export function update(data: GoodsType) {
+export function updateUser(data: GoodsType) {
     return request({
         url: `${baseUrl}`,
         method: 'PUT',
@@ -70,7 +70,7 @@ export function isExist(params: {code: string}) {
  */
 export function getCategoryList() {
     return request({
-        url: `${baseUrl}/list`,
+        url: `${baseUrl}/category/list`,
         method: 'GET'
     });
 }
