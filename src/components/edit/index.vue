@@ -3,6 +3,8 @@ import {onBeforeUnmount, ref, shallowRef, onMounted, reactive, watch, nextTick} 
 import {Editor, Toolbar} from '@wangeditor/editor-for-vue'
 import '@wangeditor/editor/dist/css/style.css'
 import type {IDomEditor} from "@wangeditor/editor"; // 引入 css
+import {uploadImages} from "@/api/common/media";
+import * as url from "url";
 
 interface Props {
   modelValue: string,
@@ -28,9 +30,25 @@ const emit = defineEmits([
 const state = reactive({
   editorVal:  props.modelValue,
   editorConfig: {
-    placeholder: props.placeholder
+    placeholder: props.placeholder,
+    MENU_CONF: {} as any
   }
 })
+
+type InsertFnType = (url: string, alt?: string, href?: string) => void
+state.editorConfig.MENU_CONF['uploadImage'] ={
+  customUpload: async function async (file: File, insertFn: InsertFnType) {  // TS 语法
+    // async customUpload(file, insertFn) {                   // JS 语法
+    // file 即选中的文件
+    // 自己实现上传，并得到图片 url alt href
+    // 最后插入图片
+    let formData = new FormData();
+    formData.append('file', file);
+    formData.append('data',JSON.stringify({sourceType: 'goods_img'}))
+    const {data: url} = await uploadImages(formData)
+    insertFn(url)
+  }
+}
 
 function handleChange(editor: IDomEditor){
   emit('update:modelValue',editor.getHtml())
@@ -60,14 +78,15 @@ watch(()=>props.disable,(bool)=>{
 </script>
 
 <template>
-  <div style="border: 1px solid #ccc">
+  <div style="border: 1px solid #ccc" class="editor-container">
     <Toolbar
+        class="editor-toolbar"
         style="border-bottom: 1px solid #ccc"
         :editor="editorRef"
         :mode="props.model"
     />
     <Editor
-        style="height: 500px; overflow-y: hidden;"
+        style="height: 500px;"
         v-model="state.editorVal"
         :defaultConfig="state.editorConfig"
         :mode="props.model"
