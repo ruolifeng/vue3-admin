@@ -2,13 +2,13 @@
 <script setup lang="ts" name="GoodsCategoryEdit">
 import useForm from '@/hooks/useForm';
 import {updateUser, addUser, isExist, getCategoryList} from '@/api/goods/list';
-import {ref, watch} from "vue";
+import {defineAsyncComponent, ref, watch} from "vue";
 import {pinyin} from "pinyin-pro";
 import {isCode} from "@/utils/validate";
 import type {UploadRequestHandler, UploadRequestOptions} from "element-plus";
 import {uploadImages} from "@/api/common/media";
 import {notify} from "@/utils/element";
-
+const TextEdit = defineAsyncComponent(()=>import('@/components/edit/index.vue'))
 const emit = defineEmits(['refresh']);
 // 初始化数据
 const initData = {status: 1, sort: 1};
@@ -231,6 +231,7 @@ async function handleUploadImage(option: UploadRequestOptions){
           <el-row>
             <el-form-item label="商品详情" prop="goodsDetail">
               <!-- 富文件编辑器 -->
+              <TextEdit v-model="formData.goodsDetail"></TextEdit>
             </el-form-item>
           </el-row>
         </el-form>
