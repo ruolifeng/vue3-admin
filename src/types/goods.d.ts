@@ -30,3 +30,17 @@ declare interface GoodsType {
     updateTime: string,
     loading: boolean
 }
+
+
+// 商品分类条件查询类型
+declare interface GoodsCategoryQuery {
+    name: string; // 分类名称
+}
+// 商品分类实体类型
+declare interface GoodsCategoryType {
+    id: string;
+    name: string;
+    status: boolean;
+    sort: number;
+    remark: string;
+}
