@@ -1,79 +1,39 @@
-<script setup lang="ts" name="LayoutAside">
-import SvgIcon from '@/components/svgicon/index.vue'
+<!-- 侧栏(垂直)菜单-->
+<script setup lang='ts'>
+import { storeToRefs } from 'pinia';
+import { defineAsyncComponent } from 'vue';
+import type { RouteRecordRaw } from 'vue-router';
 import {useLayoutConfigStore} from "@/stores/layoytConfig";
-import {storeToRefs} from "pinia";
-
-const store = useLayoutConfigStore();
-const {isCollapse} = storeToRefs(store);
+const SubMenu = defineAsyncComponent(() => import('@/layout/layoutAside/subMenu.vue'));
+const layoutConfig = useLayoutConfigStore();
+// 是否折叠收起菜单
+const { isCollapse } = storeToRefs(layoutConfig);
+// 父组件传递的prop
+withDefaults(defineProps<{
+  menuList: RouteRecordRaw[],
+}>(), {
+  menuList: () => [],
+});
 </script>
-
 <template>
-  <el-scrollbar class="custom-scrollbar">
+  <!--滚动条-->
+  <el-scrollbar>
+    <!--
+    router 开启路由功能，使用 index 属性指定路由地址
+    default-active 默认选中哪个菜单
+    background-color 背景色
+    :default-openeds 默认选中哪个菜单，值为index值数组，要v-bind绑定
+    -->
     <el-menu
         router
         :default-active="$route.path"
-        background-color="translate"
+        background-color="transparent"
         :default-openeds="['/system']"
         :collapse="isCollapse"
     >
-      <el-menu-item index="/home">
-        <SvgIcon name="ele-HomeFilled"></SvgIcon>
-        <span>首页</span>
-      </el-menu-item>
-      <el-sub-menu index="/system">
-        <template #title>
-          <SvgIcon name="ele-Setting"></SvgIcon>
-          <span>系统管理</span>
-        </template>
-        <el-menu-item index="/system/menu">
-          <template #title>
-            <SvgIcon name="ele-Menu"></SvgIcon>
-            <span>菜单管理</span>
-          </template>
-        </el-menu-item>
-        <el-menu-item index="/system/role">
-          <template #title>
-            <SvgIcon name="ele-Bowl"></SvgIcon>
-            <span>角色管理</span>
-          </template>
-        </el-menu-item>
-        <el-menu-item index="/system/user">
-          <template #title>
-            <SvgIcon name="ele-Dish"></SvgIcon>
-            <span>用户管理</span>
-          </template>
-        </el-menu-item>
-      </el-sub-menu>
-      <el-sub-menu index="/goods">
-        <template #title>
-          <SvgIcon name="ele-Goods"></SvgIcon>
-          <span>商品管理</span>
-        </template>
-        <el-menu-item index="/goods/list">
-          <template #title>
-            <SvgIcon name="ele-Operation"></SvgIcon>
-            <span>商品列表</span>
-          </template>
-        </el-menu-item>
-        <el-menu-item index="/goods/category">
-          <template #title>
-            <SvgIcon name="ele-GoodsFilled"></SvgIcon>
-            <span>商品分类</span>
-          </template>
-        </el-menu-item>
-      </el-sub-menu>
-      <el-menu-item index="/author">
-        <SvgIcon name="ele-Link"></SvgIcon>
-        <span>作者官网</span>
-      </el-menu-item>
-      <el-menu-item index="/404">
-        <SvgIcon name="ele-Warning"></SvgIcon>
-        <span>404</span>
-      </el-menu-item>
+      <SubMenu v-for="menu in menuList" :key="menu.path" :menu="menu"/>
     </el-menu>
   </el-scrollbar>
 </template>
-
 <style scoped>
-
 </style>

@@ -8,8 +8,8 @@ const state = reactive({
   isRemember: true,
   loading: false,
   loginData: {
-    username: auth.rememberData?.username,
-    password: auth.rememberData?.password
+    username: auth.rememberData?.username || '123456',
+    password: auth.rememberData?.password || '123456'
   } as LoginData
 })
 
@@ -84,7 +84,7 @@ function submitForm() {
 .login-container {
   height: 100%;
   width: 100%;
-  background-image: url("@/assets/images/back.jpg");
+  background-image: url("@/assets/images/back6.jpg");
   background-size: cover;
   overflow: hidden;
   display: flex;

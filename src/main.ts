@@ -18,10 +18,11 @@ import '@/styles/index.scss';
 // 路由拦截器
 
 import '@/router/permission'
+import {directive} from "@/directive";
 const app = createApp(App);
-
+directive(app)
 app.use(ElementPlus, {locale: zhCn});
-
+// app.use(pinia)
 app.use(createPinia());
 app.use(router);
 // 注册图标

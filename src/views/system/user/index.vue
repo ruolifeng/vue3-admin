@@ -2,6 +2,8 @@
 import {deleteUserById,getPageList} from "@/api/system/user";
 import {useTablePage} from '@/hooks/useTablePage'
 import {defineAsyncComponent, ref} from "vue";
+import {auth} from "@/utils/authFunction";
+import {msg} from "@/utils/element";
 const UserEdit = defineAsyncComponent(()=>import('@/views/system/user/components/user-edit.vue'))
 const Password = defineAsyncComponent(()=>import('@/views/system/user/components/password.vue'))
 const {tableListRef,
@@ -23,6 +25,11 @@ const passwordRef = ref()
 function handlePwd(row:SysUserType){
   passwordRef.value.open(row)
 }
+function handleAddBefore() {
+  if ( !auth('system:user:add') ) return msg('对不起，您没有权限！');
+  msg('恭喜，您有权限！', {type: 'success'});
+  handleAdd();
+}
 </script>
 
 <template>
@@ -33,7 +40,7 @@ function handlePwd(row:SysUserType){
       </el-form-item>
       <el-form-item>
         <el-button icon="ele-Search" @click="handleQuery()" type="primary">查询</el-button>
-        <el-button icon="ele-Plus" @click="handleAdd()" type="success">新增用户</el-button>
+        <el-button icon="ele-Plus" @click="handleAddBefore()" type="success">新增用户</el-button>
       </el-form-item>
     </el-form>
     <el-table

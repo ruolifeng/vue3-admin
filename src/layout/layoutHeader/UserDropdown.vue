@@ -4,7 +4,8 @@ import {useFullscreen, useDark, useToggle} from '@vueuse/core'
 import {useLayoutConfigStore} from "@/stores/layoytConfig";
 import {storeToRefs} from "pinia";
 import {ref} from "vue";
-
+import {useAuthStore} from "@/stores/auth";
+const authStore = useAuthStore();
 const theme = ref<boolean>(true);
 const store = useLayoutConfigStore();
 const {isFullScreen} = storeToRefs(store);
@@ -54,7 +55,7 @@ const toggle = useToggle(isDark);
           <el-dropdown-menu>
             <el-dropdown-item @click="router.push('/')">首页</el-dropdown-item>
             <el-dropdown-item @click="router.push('/404')">404</el-dropdown-item>
-            <el-dropdown-item divided @click="router.push('/logoOut')">退出系统</el-dropdown-item>
+            <el-dropdown-item @click="authStore.userLogout()" divided>退出系统</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>

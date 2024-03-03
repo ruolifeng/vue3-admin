@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import {login} from "@/api/auth/login";
 import {Session, Local} from "@/utils/storage";
 import type {RouteRecordRaw} from "vue-router";
+import {logout} from "@/api/auth";
 
 
 export const Key = {
@@ -47,6 +48,29 @@ export const useAuthStore = defineStore('auth', {
         },
         setMenuList (data = [] as RouteRecordRaw[]) {
             this.menuList = data;
-        }
-    },
+        },
+        // 退出系统
+        userLogout() {
+            return new Promise((resolve, reject) => {
+                logout().then((res:any) => {
+// 重置状态
+                    this.resetUserState();
+// 重新加载当前页，需认证页面会去登录页
+                    window.location.reload();
+                    resolve(res);
+                }).catch((error: Error)=> {
+                    reject(error);
+                })
+            });
+        },
+        // 重置用户状态
+        resetUserState() {
+            this.menuList = [];
+            this.accessToken = undefined;
+            this.userInfo = undefined;
+// 移除保存的数据
+            Session.remove(Key.accessTokenKey);
+            Session.remove(Key.userInfoKey);
+        },
+    }
 })
