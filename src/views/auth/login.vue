@@ -24,8 +24,8 @@ function checkUsername(rule: any, value: string, callback: Function) {
   callback();
 }
 
-function checkPassword(rule: any, value: string, callback: Function) {
-  if (!value) return callback(new Error('请输入有效密码'))
+function checkPassword(rule: any, value: string, callback: Function) {  if (!value) return callback(new Error('请输入有效密码'))
+
   if (!isPassword(value)) return callback(new Error('账号或密码错误'))
   callback();
 }

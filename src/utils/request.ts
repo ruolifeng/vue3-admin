@@ -1,6 +1,7 @@
 import axios from "axios";
 import type {AxiosInstance} from "axios";
 import {ElMessage} from "element-plus";
+import {useAuthStore} from "@/stores/auth";
 
 /**
  * 手动创建一个axios实例
@@ -17,6 +18,12 @@ const request: AxiosInstance = axios.create({
 // 请求拦截器
 request.interceptors.request.use((config) => {
     // 在发送请求的时候加上token
+    const authStore = useAuthStore();
+    const accessToken = authStore.accessToken;
+    if (accessToken) {
+        // 请求头带上令牌
+        config.headers.Authorization = accessToken;
+    }
     return config;
 }, (error) => {
     // 发现异常则捕获处理
