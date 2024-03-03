@@ -15,6 +15,9 @@ import {useUI} from '@/utils/setGlobal'
 // 引入全局样式
 import '@/styles/index.scss';
 
+// 路由拦截器
+
+import '@/router/permission'
 const app = createApp(App);
 
 app.use(ElementPlus, {locale: zhCn});
