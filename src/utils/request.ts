@@ -20,11 +20,16 @@ request.interceptors.request.use((config) => {
     // 在发送请求的时候加上token
     const authStore = useAuthStore();
     const accessToken = authStore.accessToken;
-    if (accessToken) {
-        // 请求头带上令牌
-        config.headers.Authorization = accessToken;
+    // 解决访问天气信息跨域问题
+    if (config.url == 'https://restapi.amap.com/v3/weather/weatherInfo?key=ef088e63e91de87233b59453cf87d32a&city=330000'){
+        return config
+    }else {
+        if (accessToken) {
+            // 请求头带上令牌
+            config.headers.Authorization = accessToken;
+        }
+        return config;
     }
-    return config;
 }, (error) => {
     // 发现异常则捕获处理
     return Promise.reject(error);
