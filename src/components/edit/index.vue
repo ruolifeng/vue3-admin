@@ -4,7 +4,6 @@ import {Editor, Toolbar} from '@wangeditor/editor-for-vue'
 import '@wangeditor/editor/dist/css/style.css'
 import type {IDomEditor} from "@wangeditor/editor"; // 引入 css
 import {uploadImages} from "@/api/common/media";
-import * as url from "url";
 
 interface Props {
   modelValue: string,

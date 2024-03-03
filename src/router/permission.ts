@@ -12,7 +12,7 @@ router.beforeEach(async (to, from, next) => {
     // 判断是否存在令牌
     if (hasToken){
         // 存在令牌
-        if (to.path === '/login'){
+        if (to.path === '\\/login.*\\'){
             return next({path: '/'});
         }else {
             // 获取用户菜单权限
