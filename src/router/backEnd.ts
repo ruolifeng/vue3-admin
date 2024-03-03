@@ -2,6 +2,7 @@ import {useAuthStore} from "@/stores/auth";
 import {getMenuUserInfo} from "@/api/system/menu";
 import type {RouteComponent, RouteRecordRaw} from "vue-router";
 import router, {defaultRoutes, dynamicRoutes} from "@/router/index";
+import {useViewRoutesStore} from "@/stores/viewRoutes";
 
 // 将文件中的组件全部一起导入
 const modules:Record<string, RouteComponent> =
@@ -49,4 +50,25 @@ export function addRouteHandle() {
         // console.log(dynamicRoutes)
         router.addRoute(route);
     })
+}
+
+/**
+ * 获取需要缓存的路由名称 `name` 存在到pinia
+ * 用于：src/layout/layoutMain/index.vue 文件中的 <keep-alive :includes=[xxx, xxx] />
+ */
+export function setCacheRouteNames() {
+// 存储缓存路由 name
+    const cacheRouteNames: string[] = [];
+    const _getNames = (route: RouteRecordRaw) => {
+// 获取缓存路由的name值
+        if (route.meta?.cache && route.name) cacheRouteNames.push(route.name as string);
+// 有子路由，则递归获取name值
+        if (route.children && route.children.length) {
+            route.children.forEach(item => _getNames(item));
+        }
+    }
+    _getNames(dynamicRoutes[0]);
+// 保存到 pinia
+    const viewRoutesStore = useViewRoutesStore();
+    viewRoutesStore.setCacheRouteNames(cacheRouteNames);
 }

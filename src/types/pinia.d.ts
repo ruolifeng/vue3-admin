@@ -23,3 +23,8 @@ declare interface UserInfo {
     username: string, // 用户账号
     imageUrl: string // 用户图片
 }
+
+// 视图路由状态
+declare interface ViewRoutesState {
+    cacheRouteNames: string[]; // 要缓存路由的name
+}
