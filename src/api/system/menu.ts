@@ -58,3 +58,12 @@ export function updateMenu(data:SysMenuType) {
         data: data
     })
 }
+
+
+// 查询登录的用户信息以及所拥有的权限
+export function getMenuUserInfo(){
+    return request({
+        url: `${baseUrl}/user`,
+        method:'GET'
+    })
+}

@@ -10,7 +10,16 @@ declare interface LoginData {
     password: string
 }
 
-declare interface AuthState<> {
-    rememberData?: LoginData;
-    accessToken?: string
+declare interface AuthState<T = any> {
+    rememberData?: LoginData,
+    accessToken?: string, // 登录访问令牌
+    userInfo?: UserInfo, // 登录用户信息
+    buttonList: string[], // 路由按钮权限
+    menuList: T[] // 路由菜单权限
+}
+
+declare interface UserInfo {
+    nickName: string, // 用户昵称
+    username: string, // 用户账号
+    imageUrl: string // 用户图片
 }
